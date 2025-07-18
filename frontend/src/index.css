@@ -1,0 +1,15 @@
+@import "tailwindcss";
+@plugin "flowbite-react/plugin/tailwindcss";
+@source "../.flowbite-react/class-list.json";
+   
+
+body {
+  font-family: "Inter", sans-serif;
+}
+
+
+@theme {
+  --color-primary: #2563EB;
+  --color-secondary: #6366F1;
+  --color-subtle: #6B7280;
+}
