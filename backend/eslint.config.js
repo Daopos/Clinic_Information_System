@@ -1,34 +1,48 @@
-// @ts-check
-
-import eslint from "@eslint/js";
+// eslint.config.js
+import js from "@eslint/js";
 import tseslint from "typescript-eslint";
-import perfectionist from "eslint-plugin-perfectionist";
-import vitest from "@vitest/eslint-plugin";
 
-export default tseslint.config(
+export default [
+  js.configs.recommended,
+  ...tseslint.configs.recommended,
   {
-    ignores: ["**/*.js"],
-  },
-  eslint.configs.recommended,
-  tseslint.configs.strictTypeChecked,
-  tseslint.configs.stylisticTypeChecked,
-  {
+    files: ["**/*.ts"],
     languageOptions: {
+      parser: tseslint.parser,
       parserOptions: {
-        projectService: true,
-        tsconfigRootDir: import.meta.dirname,
+        ecmaVersion: 2021,
+        sourceType: "module",
+        strict: true,
+        project: "./tsconfig.json", // Recommended for type-aware linting
       },
     },
-  },
-  perfectionist.configs["recommended-natural"],
-  {
-    files: ["**/*.test.ts", "**/*.spec.ts"],
-    plugins: {
-      vitest,
-    },
     rules: {
-      ...vitest.configs.recommended.rules,
-      "@typescript-eslint/unbound-method": "off",
+      indent: ["warn", 2],
+      "linebreak-style": ["warn", "windows"],
+      semi: ["warn", "always"],
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        {
+          argsIgnorePattern: "^_",
+          vars: "all", // Ensure all variables are checked
+          caughtErrors: "all", // Check caught errors
+          ignoreRestSiblings: false,
+          // Include class methods in unused checks
+          varsIgnorePattern: "^_", // Optional: Ignore variables starting with '_'
+        },
+      ],
+      "@typescript-eslint/no-explicit-any": "error",
+      "@typescript-eslint/explicit-function-return-type": "warn",
+      "@typescript-eslint/explicit-module-boundary-types": "warn",
+      "@typescript-eslint/typedef": [
+        "error",
+        {
+          variableDeclaration: true,
+          memberVariableDeclaration: true,
+          parameter: false,
+          propertyDeclaration: true,
+        },
+      ],
     },
   },
-);
+];
