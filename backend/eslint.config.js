@@ -17,7 +17,6 @@ export default [
       },
     },
     rules: {
-      indent: ["warn", 2],
       "linebreak-style": ["warn", "windows"],
       semi: ["warn", "always"],
       "@typescript-eslint/no-unused-vars": [
@@ -37,7 +36,7 @@ export default [
       "@typescript-eslint/typedef": [
         "error",
         {
-          variableDeclaration: true,
+          variableDeclaration: false,
           memberVariableDeclaration: true,
           parameter: false,
           propertyDeclaration: true,
