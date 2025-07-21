@@ -2,8 +2,8 @@ import bg from "../../assets/images/bg.jpg";
 import { Button, Label, TextInput } from "flowbite-react";
 const Login = () => {
   return (
-    <div className="p-20 h-screen bg-primary-100 ">
-      <div className="flex min-h-full rounded-xl shadow-lg  border-1 bg-white border-gray-200">
+    <div className="p-20 h-screen bg-primary-100 dark:bg-gray-500">
+      <div className="flex min-h-full rounded-xl shadow-lg  border-1 bg-white border-gray-200 dark:bg-gray-800">
         <div className="relative w-full">
           <div
             className="absolute inset-0  bg-cover bg-center rounded-xl"
