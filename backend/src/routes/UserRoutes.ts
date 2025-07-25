@@ -1,5 +1,6 @@
 import express from "express";
 import UserController from "../controllers/UserController";
+import authentication from "../middleware/authentication";
 
 class UserRoutes {
   public router: express.Router = express.Router();
@@ -9,7 +10,12 @@ class UserRoutes {
   }
 
   public config(): void {
-    this.router.post("/user", UserController.createUser.bind(UserController));
+    this.router.post(
+      "/user",
+      authentication("ADMIN"),
+      UserController.createUser.bind(UserController)
+    );
+    this.router.post("/login", UserController.loginUser.bind(UserController));
   }
 }
 

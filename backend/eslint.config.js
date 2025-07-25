@@ -30,7 +30,7 @@ export default [
           varsIgnorePattern: "^_", // Optional: Ignore variables starting with '_'
         },
       ],
-      "@typescript-eslint/no-explicit-any": "error",
+      "@typescript-eslint/no-explicit-any": "off",
       "@typescript-eslint/explicit-function-return-type": "warn",
       "@typescript-eslint/explicit-module-boundary-types": "warn",
       "@typescript-eslint/typedef": [

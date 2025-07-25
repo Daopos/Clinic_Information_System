@@ -1,11 +1,14 @@
 import { User } from "../entities/User";
 import IUser from "../interfaces/IUser";
 import { ApiError } from "../middleware/errorHandler";
+import bcrypt from "bcrypt";
 
 class UserService {
   constructor(private _repo: IUser) {}
 
-  public async createUser(data: Partial<User>): Promise<User> {
+  public async createUser(
+    data: Partial<User>
+  ): Promise<Omit<User, "password">> {
     const checkUser = await this._repo.findByEmail(data.email!);
 
     if (checkUser) {
@@ -13,8 +16,12 @@ class UserService {
     }
 
     try {
+      const salt = await bcrypt.genSalt(10);
+      const hashPassword = await bcrypt.hash(data.password!, salt);
+      data.password = hashPassword;
       const user = await this._repo.create(data);
-      return user;
+      const { password, ...safeUser } = user;
+      return safeUser;
     } catch (err) {
       throw new ApiError(err as string, 400);
     }
@@ -48,6 +55,16 @@ class UserService {
     }
 
     return this._repo.update(id, data);
+  }
+
+  public async loginUser(email: string, password: string): Promise<User> {
+    const user = await this._repo.findByEmail(email);
+
+    if (!user || !(await bcrypt.compare(password, user.password))) {
+      throw new ApiError("Invalid email or password", 401);
+    }
+
+    return user;
   }
 }
 

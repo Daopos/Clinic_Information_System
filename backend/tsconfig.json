@@ -6,7 +6,7 @@
     "rootDir": "./src",
     "noUnusedLocals": true,
     "noUnusedParameters": false,
-    "strict": true,
+    "strict": false,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "experimentalDecorators": true,

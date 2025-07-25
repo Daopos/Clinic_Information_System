@@ -1,6 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import UserRepo from "../repositories/UserRepo";
 import UserService from "../services/UserService";
+import { ApiError } from "../middleware/errorHandler";
+import { generateToken } from "../util/generateToken";
 
 class UserController {
   private userService: UserService;
@@ -33,6 +35,46 @@ class UserController {
 
       res.json({ responseData: data });
       return;
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  public async loginUser(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      res.status(401).json({ message: "Email and passowrd are required!" });
+      throw new ApiError("email or password is missing!", 401);
+    }
+
+    try {
+      const user = await this.userService.loginUser(email, password);
+
+      const payload = {
+        id: user.id,
+        role: user.role,
+      };
+      const token = generateToken(payload);
+
+      const data = {
+        firstname: user.firstname,
+      };
+
+      res.cookie("token", token, {
+        httpOnly: true, // Prevent access from JS (XSS protection)
+        secure: process.env.NODE_ENV === "production", // HTTPS only in production
+        sameSite: "strict", // CSRF protection
+        maxAge: 1000 * 60 * 60, // Optional: 1 hour expiration
+      });
+
+      res
+        .status(200)
+        .json({ message: "Successfullly login", responseData: data });
     } catch (err) {
       next(err);
     }

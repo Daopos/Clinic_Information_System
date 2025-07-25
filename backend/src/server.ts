@@ -1,5 +1,7 @@
 import "reflect-metadata";
 import express from "express";
+import cors from "cors";
+import cookieParser from "cookie-parser";
 import { AppDataSource } from "./config/data-source";
 import UserRoutes from "./routes/UserRoutes";
 import * as dotenv from "dotenv";
@@ -11,6 +13,7 @@ class server {
 
   constructor() {
     this.app = express();
+    this.app.use(cookieParser()); // 👈 Enables req.cookies
     this.app.use(express.json());
     //initialize functions
     this.connectDB();
@@ -20,6 +23,12 @@ class server {
   }
 
   private middleware(): void {
+    this.app.use(
+      cors({
+        origin: "http://localhost:3000", // your frontend origin
+        credentials: true, // allow cookies to be sent
+      })
+    );
     this.app.use(errorHandler);
   }
 
