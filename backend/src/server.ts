@@ -15,6 +15,12 @@ class server {
     this.app = express();
     this.app.use(cookieParser()); // 👈 Enables req.cookies
     this.app.use(express.json());
+    this.app.use(
+      cors({
+        origin: "http://localhost:5173", // your frontend origin
+        credentials: true, // allow cookies to be sent
+      })
+    );
     //initialize functions
     this.connectDB();
     this.routes();
@@ -23,12 +29,6 @@ class server {
   }
 
   private middleware(): void {
-    this.app.use(
-      cors({
-        origin: "http://localhost:3000", // your frontend origin
-        credentials: true, // allow cookies to be sent
-      })
-    );
     this.app.use(errorHandler);
   }
 

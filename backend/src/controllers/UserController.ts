@@ -63,6 +63,7 @@ class UserController {
 
       const data = {
         firstname: user.firstname,
+        role: user.role,
       };
 
       res.cookie("token", token, {

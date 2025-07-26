@@ -61,7 +61,17 @@ const Sidebar = () => {
               Patient
             </NavLink>
           </li>
-          <li></li>
+          <li className="px-4 ">
+            <NavLink
+              to="/admin/employees"
+              className={({ isActive }) =>
+                `${linkClass} ${isActive ? activeClass : ""}`
+              }
+            >
+              <UserGroupIcon className="h-6 w-6" />
+              Employees
+            </NavLink>
+          </li>
         </ul>
       </nav>
     </div>
