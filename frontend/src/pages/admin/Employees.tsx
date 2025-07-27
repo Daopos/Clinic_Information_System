@@ -1,16 +1,31 @@
 import { useState } from "react";
 import EmployeeFormModal from "../../components/admin/EmployeeFormModal";
 import type { EmployeeFormData } from "../../types/IEmployee";
+import { useEmployees } from "../../hooks/useEmployees";
 
 const Employees = () => {
   const [openModal, setOpenModal] = useState<boolean>(false);
+  const [shouldResetForm, setShouldResetForm] = useState<boolean>(false);
+  const { employees, createEmployee, deleteEmployee } = useEmployees();
 
   const handleModal = () => {
     setOpenModal(!openModal);
   };
 
-  const handleSubmit = (data: EmployeeFormData) => {
-    console.log(data);
+  const handleSubmit = async (data: EmployeeFormData) => {
+    try {
+      await createEmployee(data);
+      setOpenModal(false);
+      setShouldResetForm(true);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        console.log(err.message);
+      }
+    }
+  };
+
+  const handleDelete = async (id: number) => {
+    await deleteEmployee(id);
   };
 
   return (
@@ -53,27 +68,40 @@ const Employees = () => {
               </tr>
             </thead>
             <tbody>
-              <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                <th
-                  scope="row"
-                  className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+              {employees.map((employee, i) => (
+                <tr
+                  key={employee.id}
+                  className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200"
                 >
-                  1.
-                </th>
-                <td className="px-6 py-4">Silver</td>
-                <td className="px-6 py-4">Laptop</td>
-                <td className="px-6 py-4 flex gap-4">
-                  <button className="font-medium text-emerald-600 dark:text-emerald-500 hover:underline">
-                    View
-                  </button>
-                  <button className="font-medium text-blue-600 dark:text-blue-500 hover:underline">
-                    Edit
-                  </button>
-                  <button className="font-medium text-red-600 dark:text-red-500 hover:underline">
-                    Delete
-                  </button>
-                </td>
-              </tr>
+                  <th
+                    scope="row"
+                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                  >
+                    {i + 1}
+                  </th>
+                  <td className="px-6 py-4">
+                    {" "}
+                    {`${employee.lastname}, ${employee.firstname}, ${employee.middlename}`}
+                  </td>
+                  <td className="px-6 py-4">{employee.role}</td>
+                  <td className="px-6 py-4 flex gap-4">
+                    <button className="font-medium text-emerald-600 dark:text-emerald-500 hover:underline">
+                      View
+                    </button>
+                    <button className="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                      Edit
+                    </button>
+                    <button
+                      className="font-medium text-red-600 dark:text-red-500 hover:underline"
+                      onClick={() => {
+                        handleDelete(employee.id);
+                      }}
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
@@ -82,6 +110,7 @@ const Employees = () => {
         openModal={openModal}
         onSubmit={handleSubmit}
         onClose={handleModal}
+        shouldReset={shouldResetForm}
       />
     </>
   );

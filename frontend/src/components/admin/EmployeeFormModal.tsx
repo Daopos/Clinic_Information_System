@@ -9,18 +9,20 @@ import {
   TextInput,
 } from "flowbite-react";
 import type { EmployeeFormData } from "../../types/IEmployee";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface FormProps {
   openModal: boolean;
   onSubmit: (formData: EmployeeFormData) => void;
   onClose: () => void;
+  shouldReset?: boolean;
 }
 
 const EmployeeFormModal: React.FC<FormProps> = ({
   openModal,
   onSubmit,
   onClose,
+  shouldReset = false,
 }) => {
   const [formData, setFormData] = useState<EmployeeFormData>({
     firstname: "",
@@ -29,6 +31,17 @@ const EmployeeFormModal: React.FC<FormProps> = ({
     role: "PHARMACIST",
     email: "",
   });
+  useEffect(() => {
+    if (shouldReset) {
+      setFormData({
+        firstname: "",
+        lastname: "",
+        middlename: "",
+        role: "PHARMACIST",
+        email: "",
+      });
+    }
+  }, [shouldReset]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>

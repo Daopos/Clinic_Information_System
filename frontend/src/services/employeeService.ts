@@ -9,7 +9,7 @@ import type { ApiResponse } from "../types/ApiResponse";
 
 const createEmployee = async (data: EmployeeFormData) => {
   try {
-    const result = await AxiosClientUser.post("/login", data);
+    const result = await AxiosClientUser.post("/user", data);
     return result.data.responseData as Employee;
   } catch (error) {
     if (error instanceof AxiosError) {
@@ -26,4 +26,10 @@ const getEmployees = async (): Promise<Employee[]> => {
   return response.data.responseData;
 };
 
-export default { createEmployee, getEmployees };
+const deleteEmployee = async (id: number): Promise<number> => {
+  await AxiosClientUser.delete(`/user/${id}`);
+
+  return id; // so we know what to filter from cache
+};
+
+export default { createEmployee, getEmployees, deleteEmployee };

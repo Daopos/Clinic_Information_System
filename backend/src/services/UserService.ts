@@ -15,6 +15,9 @@ class UserService {
       throw new ApiError("Email is already used", 409);
     }
 
+    if (!data.password) {
+      data.password = "123"; // fallback if password is missing
+    }
     try {
       const salt = await bcrypt.genSalt(10);
       const hashPassword = await bcrypt.hash(data.password!, salt);
@@ -23,6 +26,7 @@ class UserService {
       const { password, ...safeUser } = user;
       return safeUser;
     } catch (err) {
+      console.log(err);
       throw new ApiError(err as string, 400);
     }
   }

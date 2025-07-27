@@ -27,6 +27,12 @@ class UserRoutes {
       authentication("ADMIN"),
       UserController.getAllUsers.bind(UserController)
     );
+
+    this.router.delete(
+      "/user/:id",
+      authentication("ADMIN"),
+      UserController.deleteUserById.bind(UserController)
+    );
   }
 }
 
