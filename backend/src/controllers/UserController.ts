@@ -80,6 +80,27 @@ class UserController {
       next(err);
     }
   }
+
+  public async me(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    const id = (req as any).id;
+
+    try {
+      const user = await this.userService.getUserById(id);
+
+      const data = {
+        firstname: user.firstname,
+        role: user.role,
+      };
+
+      res.status(200).json({ responseData: data });
+    } catch (err) {
+      next(err);
+    }
+  }
 }
 
 export default new UserController();

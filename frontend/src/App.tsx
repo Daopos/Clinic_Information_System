@@ -1,24 +1,26 @@
 import { RouterProvider } from "react-router";
 import "./App.css";
 import router from "./routes.tsx";
-// import { useDispatch } from "react-redux";
-// import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { me } from "./services/Auth.ts";
+import { clearUser, setUser } from "./store/user/userSlice.ts";
 
 function App() {
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   const init = async () => {
-  //     try {
-  //       const user = await fetchMe(); // GET /me, sends cookie
-  //       dispatch(setUser(user));
-  //     } catch (err) {
-  //       dispatch(clearUser()); // Not logged in
-  //     }
-  //   };
+  useEffect(() => {
+    const init = async () => {
+      try {
+        const user = await me(); // GET /me, sends cookie
+        dispatch(setUser(user));
+      } catch {
+        dispatch(clearUser()); // Not logged in
+      }
+    };
 
-  //   init();
-  // }, []);
+    init();
+  }, []);
   return <RouterProvider router={router} />;
 }
 

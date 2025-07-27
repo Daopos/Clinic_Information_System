@@ -16,6 +16,11 @@ class UserRoutes {
       UserController.createUser.bind(UserController)
     );
     this.router.post("/login", UserController.loginUser.bind(UserController));
+    this.router.get(
+      "/me",
+      authentication(),
+      UserController.me.bind(UserController)
+    );
   }
 }
 
