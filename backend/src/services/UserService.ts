@@ -41,7 +41,7 @@ class UserService {
     const user = await this._repo.findById(id);
 
     if (!user) {
-      throw new ApiError("No User Found", 400);
+      throw new ApiError("No User Found", 404);
     }
 
     await this._repo.deleteById(id);
@@ -65,6 +65,12 @@ class UserService {
     }
 
     return user;
+  }
+
+  public async getAllUsers(): Promise<Partial<User>[]> {
+    const users = await this._repo.getUsers();
+
+    return users;
   }
 }
 

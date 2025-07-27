@@ -101,6 +101,20 @@ class UserController {
       next(err);
     }
   }
+
+  public async getAllUsers(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      const users = await this.userService.getAllUsers();
+
+      res.status(200).json({ responseData: users });
+    } catch (err) {
+      next(err);
+    }
+  }
 }
 
 export default new UserController();

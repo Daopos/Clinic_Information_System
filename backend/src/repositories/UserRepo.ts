@@ -31,6 +31,22 @@ class UserRepo implements IUser {
   public async findByEmail(email: string): Promise<User | null> {
     return await this.repo.findOneBy({ email });
   }
+
+  public async getUsers(): Promise<Partial<User>[]> {
+    return await this.repo
+      .createQueryBuilder("users")
+      .select([
+        "user.id",
+        "user.firstname",
+        "user.middlename",
+        "user.lastname",
+        "user.email",
+        "user.role",
+      ])
+      .from(User, "user")
+      .where("user.role != :role", { role: "ADMIN" })
+      .getMany();
+  }
 }
 
 export default new UserRepo();

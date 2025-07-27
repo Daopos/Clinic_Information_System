@@ -21,6 +21,12 @@ class UserRoutes {
       authentication(),
       UserController.me.bind(UserController)
     );
+
+    this.router.get(
+      "/users",
+      authentication("ADMIN"),
+      UserController.getAllUsers.bind(UserController)
+    );
   }
 }
 

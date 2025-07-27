@@ -6,4 +6,5 @@ export default interface IUser {
   findById(id: number): Promise<User | null>;
   deleteById(id: number): Promise<void>;
   findByEmail(email: string): Promise<User | null>;
+  getUsers(): Promise<Partial<User>[]>;
 }
