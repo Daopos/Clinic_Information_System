@@ -1,31 +1,89 @@
 import { useState } from "react";
 import EmployeeFormModal from "../../components/admin/EmployeeFormModal";
-import type { EmployeeFormData } from "../../types/IEmployee";
+import type { Employee, EmployeeFormData } from "../../types/IEmployee";
 import { useEmployees } from "../../hooks/useEmployees";
+import DeleteModal from "../../components/DeleteModal";
+import toast, { Toaster } from "react-hot-toast";
 
 const Employees = () => {
   const [openModal, setOpenModal] = useState<boolean>(false);
+  const [editModal, setEditModal] = useState<boolean>(false);
   const [shouldResetForm, setShouldResetForm] = useState<boolean>(false);
-  const { employees, createEmployee, deleteEmployee } = useEmployees();
+  const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(
+    null
+  );
+
+  const {
+    employees,
+    createEmployee,
+    deleteEmployee,
+    createPending,
+    deletePending,
+    updatePending,
+    updateEmployee,
+  } = useEmployees();
+
+  const [deleteModal, setDeleteModal] = useState<boolean>(false);
+  const [deleteId, setDeleteId] = useState<number>();
+
+  const handleDeleteModal = () => {
+    setDeleteModal(!deleteModal);
+  };
 
   const handleModal = () => {
     setOpenModal(!openModal);
   };
 
+  // Fixed: Added missing handleEditModal function
+  const handleEditModal = (employee: Employee) => {
+    setSelectedEmployee(employee);
+    setEditModal(true);
+  };
+
+  const handleCloseEditModal = () => {
+    setSelectedEmployee(null);
+    setEditModal(false);
+  };
+
   const handleSubmit = async (data: EmployeeFormData) => {
+    toast.dismiss();
     try {
       await createEmployee(data);
       setOpenModal(false);
       setShouldResetForm(true);
+      toast.success("Successfully created!");
     } catch (err: unknown) {
       if (err instanceof Error) {
-        console.log(err.message);
+        toast.error(err.message);
       }
     }
   };
 
-  const handleDelete = async (id: number) => {
-    await deleteEmployee(id);
+  const handleDelete = async (): Promise<void> => {
+    toast.dismiss();
+    try {
+      await deleteEmployee(deleteId!);
+      setDeleteModal(false);
+      toast.success("Successfully deleted!");
+    } catch (err) {
+      if (err instanceof Error) {
+        toast.error(err.message);
+      }
+    }
+  };
+
+  const handleUpdate = async (data: EmployeeFormData) => {
+    toast.dismiss();
+    try {
+      // Fixed: Pass the correct parameters to updateEmployee
+      await updateEmployee({ id: selectedEmployee!.id, data });
+      handleCloseEditModal();
+      toast.success("Successfully updated!");
+    } catch (err) {
+      if (err instanceof Error) {
+        toast.error(err.message);
+      }
+    }
   };
 
   return (
@@ -37,9 +95,9 @@ const Employees = () => {
               Employees
               <div className="flex justify-between">
                 <p className="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400">
-                  Browse and manage a complete list of medicines, including
-                  availability, dosage, expiration dates, and stock levels for
-                  your inventory.
+                  {/* Fixed: Updated description to match employees instead of medicines */}
+                  Browse and manage a complete list of employees, including
+                  their roles, contact information, and employment details.
                 </p>
                 <button
                   type="button"
@@ -61,7 +119,6 @@ const Employees = () => {
                 <th scope="col" className="px-6 py-3">
                   Type
                 </th>
-
                 <th scope="col" className="px-6 py-3">
                   Actions
                 </th>
@@ -80,7 +137,6 @@ const Employees = () => {
                     {i + 1}
                   </th>
                   <td className="px-6 py-4">
-                    {" "}
                     {`${employee.lastname}, ${employee.firstname}, ${employee.middlename}`}
                   </td>
                   <td className="px-6 py-4">{employee.role}</td>
@@ -88,13 +144,17 @@ const Employees = () => {
                     <button className="font-medium text-emerald-600 dark:text-emerald-500 hover:underline">
                       View
                     </button>
-                    <button className="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                    <button
+                      className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                      onClick={() => handleEditModal(employee)}
+                    >
                       Edit
                     </button>
                     <button
                       className="font-medium text-red-600 dark:text-red-500 hover:underline"
                       onClick={() => {
-                        handleDelete(employee.id);
+                        setDeleteId(employee.id);
+                        handleDeleteModal();
                       }}
                     >
                       Delete
@@ -111,7 +171,26 @@ const Employees = () => {
         onSubmit={handleSubmit}
         onClose={handleModal}
         shouldReset={shouldResetForm}
+        pending={createPending}
+        mode="create"
       />
+      <EmployeeFormModal
+        openModal={editModal}
+        // Fixed: Removed incorrect parameters and use handleUpdate directly
+        onSubmit={handleUpdate}
+        onClose={handleCloseEditModal}
+        pending={updatePending}
+        initialData={selectedEmployee}
+        mode="edit"
+      />
+
+      <DeleteModal
+        onClose={handleDeleteModal}
+        openModal={deleteModal}
+        onSubmit={handleDelete}
+        pending={deletePending}
+      />
+      <Toaster />
     </>
   );
 };

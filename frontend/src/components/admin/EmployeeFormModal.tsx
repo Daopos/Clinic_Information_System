@@ -6,16 +6,21 @@ import {
   ModalFooter,
   ModalHeader,
   Select,
+  Spinner,
   TextInput,
 } from "flowbite-react";
 import type { EmployeeFormData } from "../../types/IEmployee";
 import { useEffect, useState } from "react";
+import { useDelayedLoading } from "../../utils/useDelayedLoading";
 
 interface FormProps {
   openModal: boolean;
   onSubmit: (formData: EmployeeFormData) => void;
   onClose: () => void;
   shouldReset?: boolean;
+  pending: boolean;
+  initialData?: EmployeeFormData | null; // <- new
+  mode?: "create" | "edit";
 }
 
 const EmployeeFormModal: React.FC<FormProps> = ({
@@ -23,6 +28,9 @@ const EmployeeFormModal: React.FC<FormProps> = ({
   onSubmit,
   onClose,
   shouldReset = false,
+  pending = false,
+  initialData,
+  mode = "create",
 }) => {
   const [formData, setFormData] = useState<EmployeeFormData>({
     firstname: "",
@@ -31,8 +39,11 @@ const EmployeeFormModal: React.FC<FormProps> = ({
     role: "PHARMACIST",
     email: "",
   });
+
+  const showSpinner = useDelayedLoading(pending, 250);
+
   useEffect(() => {
-    if (shouldReset) {
+    if (shouldReset || !initialData) {
       setFormData({
         firstname: "",
         lastname: "",
@@ -40,8 +51,10 @@ const EmployeeFormModal: React.FC<FormProps> = ({
         role: "PHARMACIST",
         email: "",
       });
+    } else {
+      setFormData(initialData);
     }
-  }, [shouldReset]);
+  }, [shouldReset, initialData]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -60,7 +73,9 @@ const EmployeeFormModal: React.FC<FormProps> = ({
 
   return (
     <Modal show={openModal} onClose={onClose}>
-      <ModalHeader>Employee Information</ModalHeader>
+      <ModalHeader>
+        {mode === "edit" ? "Edit Employee Information" : "Create Employee"}
+      </ModalHeader>
       <ModalBody>
         <form className="flex max-w-md flex-col gap-4">
           <div>
@@ -138,8 +153,27 @@ const EmployeeFormModal: React.FC<FormProps> = ({
         </form>
       </ModalBody>
       <ModalFooter>
-        <Button onClick={handleSubmit}>Create</Button>
-        <Button color="alternative" onClick={onClose}>
+        <Button onClick={handleSubmit} disabled={pending}>
+          {showSpinner ? (
+            <>
+              <Spinner
+                aria-label={`${
+                  mode === "edit" ? "Updating" : "Creating"
+                } employee`}
+                size="sm"
+                light
+              />
+              <span className="pl-3">
+                {mode === "edit" ? "Updating..." : "Creating..."}
+              </span>
+            </>
+          ) : mode === "edit" ? (
+            "Update"
+          ) : (
+            "Create"
+          )}
+        </Button>
+        <Button color="alternative" onClick={onClose} disabled={pending}>
           Cancel
         </Button>
       </ModalFooter>

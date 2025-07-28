@@ -27,9 +27,42 @@ const getEmployees = async (): Promise<Employee[]> => {
 };
 
 const deleteEmployee = async (id: number): Promise<number> => {
-  await AxiosClientUser.delete(`/user/${id}`);
+  try {
+    await AxiosClientUser.delete(`/user/${id}`);
 
-  return id; // so we know what to filter from cache
+    return id; // so we know what to filter from cache
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      const errorMessage = error.response?.data?.message || "failed";
+      throw new Error(errorMessage);
+    }
+    throw new Error("An unknown error occurred during login");
+  }
 };
 
-export default { createEmployee, getEmployees, deleteEmployee };
+const updateEmployees = async (
+  id: number,
+  data: EmployeeFormData
+): Promise<Employee> => {
+  try {
+    const response = await AxiosClientUser.put<ApiResponse<Employee>>(
+      `/user/${id}`,
+      data
+    );
+
+    return response.data.responseData;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      const errorMessage = error.response?.data?.message || "failed";
+      throw new Error(errorMessage);
+    }
+    throw new Error("An unknown error occurred during login");
+  }
+};
+
+export default {
+  createEmployee,
+  getEmployees,
+  deleteEmployee,
+  updateEmployees,
+};

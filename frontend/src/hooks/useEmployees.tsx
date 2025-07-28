@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import type { Employee } from "../types/IEmployee";
+import type { Employee, EmployeeFormData } from "../types/IEmployee";
 import employeeService from "../services/employeeService";
 
 export const useEmployees = () => {
@@ -47,6 +47,22 @@ export const useEmployees = () => {
     },
   });
 
+  const {
+    mutateAsync: updateEmployee,
+    isSuccess: updateSuccess,
+    isPending: updatePending,
+    isError: updateError,
+  } = useMutation({
+    mutationFn: ({ id, data }: { id: number; data: EmployeeFormData }) =>
+      employeeService.updateEmployees(id, data),
+    onSuccess: (updatedEmployee) => {
+      queryClient.setQueryData<Employee[]>(["employees"], (old = []) =>
+        old.map((emp) =>
+          emp.id === updatedEmployee.id ? updatedEmployee : emp
+        )
+      );
+    },
+  });
   return {
     employees,
     isLoading,
@@ -64,5 +80,10 @@ export const useEmployees = () => {
     deleteSuccess,
     deletePending,
     deleteError,
+
+    updateEmployee,
+    updateSuccess,
+    updatePending,
+    updateError,
   };
 };
