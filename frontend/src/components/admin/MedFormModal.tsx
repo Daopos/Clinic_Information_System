@@ -1,9 +1,6 @@
-// interface MedFormmModalProps {
-//   mode: "add" | "edit";
-// //   inittialData?: Medicine;
-// onSubmit: (data: Meicine) => void;
-// open: boolean;
-// onClose: () => void;
+// interface FormProps {
+//     openModal: boolean,
+//     onSubmit: (formdata:)
 // }
 
 // const MedFormModal: React.FC<MedFormModalProps> = ({

@@ -55,10 +55,10 @@ class UserService {
     const user = await this._repo.findById(id);
 
     if (!user) {
-      throw new ApiError("No User Found", 400);
+      throw new ApiError("No User Found", 404);
     }
 
-    return this._repo.update(id, data);
+    return await this._repo.update(id, data);
   }
 
   public async loginUser(email: string, password: string): Promise<User> {

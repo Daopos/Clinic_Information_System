@@ -34,6 +34,12 @@ const Medicine = () => {
                 Hand in
               </th>
               <th scope="col" className="px-6 py-3">
+                Expiration
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Stock
+              </th>
+              <th scope="col" className="px-6 py-3">
                 Status
               </th>
               <th scope="col" className="px-6 py-3">
@@ -47,12 +53,17 @@ const Medicine = () => {
                 scope="row"
                 className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
               >
-                Apple MacBook Pro 17"
+                Abiraterone
               </th>
-              <td className="px-6 py-4">Silver</td>
-              <td className="px-6 py-4">Laptop</td>
-              <td className="px-6 py-4">$2999</td>
-              <td className="px-6 py-4">$2999</td>
+              <td className="px-6 py-4">123mg</td>
+              <td className="px-6 py-4">Tablet</td>
+              <td className="px-6 py-4">2024-08-02</td>
+              <td className="px-6 py-4">2024-08-02</td>
+              <td className="px-6 py-4">36</td>
+              <td className="px-6 py-4">
+                <div className="bg-green-200 w-fit p-1 rounded-md">Good</div>
+              </td>
+
               <td className="px-6 py-4 flex gap-4">
                 <a
                   href="#"

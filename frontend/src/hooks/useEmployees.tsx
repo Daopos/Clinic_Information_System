@@ -27,8 +27,8 @@ export const useEmployees = () => {
       // queryClient.invalidateQueries({ queryKey: ["employees"] });
 
       queryClient.setQueryData<Employee[]>(["employees"], (old = []) => [
-        ...old,
         newEmployee,
+        ...old,
       ]);
     },
   });

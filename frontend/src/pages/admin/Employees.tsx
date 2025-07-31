@@ -117,7 +117,7 @@ const Employees = () => {
                   Name
                 </th>
                 <th scope="col" className="px-6 py-3">
-                  Type
+                  Role
                 </th>
                 <th scope="col" className="px-6 py-3">
                   Actions
@@ -137,7 +137,7 @@ const Employees = () => {
                     {i + 1}
                   </th>
                   <td className="px-6 py-4">
-                    {`${employee.lastname}, ${employee.firstname}, ${employee.middlename}`}
+                    {`${employee.lastname}, ${employee.firstname} ${employee.middlename}`}
                   </td>
                   <td className="px-6 py-4">{employee.role}</td>
                   <td className="px-6 py-4 flex gap-4">

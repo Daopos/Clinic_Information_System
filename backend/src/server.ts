@@ -6,6 +6,7 @@ import { AppDataSource } from "./config/data-source";
 import UserRoutes from "./routes/UserRoutes";
 import * as dotenv from "dotenv";
 import { errorHandler } from "./middleware/errorHandler";
+import medicineRoutes from "./routes/medicineRoutes";
 dotenv.config();
 
 class server {
@@ -39,7 +40,11 @@ class server {
   }
 
   private routes(): void {
+    //user Routes
     this.app.use("/api/v1", UserRoutes);
+
+    //medicine Routes
+    this.app.use("/api/v1", medicineRoutes);
   }
 
   private serve(): void {

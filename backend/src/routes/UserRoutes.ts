@@ -9,7 +9,7 @@ class UserRoutes {
     this.config();
   }
 
-  public config(): void {
+  private config(): void {
     this.router.post(
       "/user",
       authentication("ADMIN"),
@@ -32,6 +32,12 @@ class UserRoutes {
       "/user/:id",
       authentication("ADMIN"),
       UserController.deleteUserById.bind(UserController)
+    );
+
+    this.router.put(
+      "/user/:id",
+      authentication("ADMIN"),
+      UserController.updateUserById.bind(UserController)
     );
   }
 }

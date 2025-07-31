@@ -133,6 +133,30 @@ class UserController {
       next(err);
     }
   }
+
+  public async updateUserById(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    const { id } = req.params;
+
+    const { firstname, lastname, middlename, email, role } = req.body;
+    const data = { firstname, lastname, middlename, email, role };
+
+    if (!id) {
+      res.status(400).json({ message: "No Id provided" });
+    }
+
+    try {
+      const result = await this.userService.updateUserById(Number(id), data);
+      res
+        .status(200)
+        .json({ message: "Successfully updated", responseData: result });
+    } catch (err) {
+      next(err);
+    }
+  }
 }
 
 export default new UserController();

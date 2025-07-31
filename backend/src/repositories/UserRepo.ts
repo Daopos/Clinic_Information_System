@@ -45,6 +45,7 @@ class UserRepo implements IUser {
       ])
       .from(User, "user")
       .where("user.role != :role", { role: "ADMIN" })
+      .orderBy("user.createdAt", "DESC")
       .getMany();
   }
 }

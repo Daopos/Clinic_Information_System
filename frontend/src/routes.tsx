@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router";
+import { createBrowserRouter, Navigate } from "react-router";
 import AdminLayout from "./layouts/AdminLayout";
 import Dashboard from "./pages/admin/Dashboard";
 import Appointment from "./pages/admin/Appointment";
@@ -9,6 +9,10 @@ import Employees from "./pages/admin/Employees";
 import RoleProtectedRoute from "./utils/ProtextedRoute";
 import GuestOnlyRoute from "./utils/GuestOnlyRoute";
 const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Navigate to="/login" replace />,
+  },
   {
     element: <GuestOnlyRoute />,
     children: [
