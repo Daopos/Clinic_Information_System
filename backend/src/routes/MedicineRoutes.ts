@@ -13,6 +13,11 @@ class MedecineRoutes {
       "/medicine",
       MedicineController.createMedicine.bind(MedicineController)
     );
+
+    this.router.get(
+      "/medicines",
+      MedicineController.getAllMedicine.bind(MedicineController)
+    );
   }
 }
 

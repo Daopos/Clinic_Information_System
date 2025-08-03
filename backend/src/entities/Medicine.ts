@@ -4,7 +4,9 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from "typeorm";
+import { MedicineStock } from "./MedicineStock";
 
 @Entity({ name: "medicines" })
 export class Medicine {
@@ -20,11 +22,8 @@ export class Medicine {
   @Column({ nullable: true })
   form_med!: string;
 
-  @Column({ nullable: false })
-  expiration!: Date;
-
-  @Column({ nullable: false })
-  stock!: number;
+  @OneToMany(() => MedicineStock, (stock) => stock.medicine)
+  stocks!: MedicineStock[];
 
   @CreateDateColumn()
   createdAt!: Date;

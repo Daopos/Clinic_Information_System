@@ -21,7 +21,7 @@ class MedicineRepo implements IMedicine {
   }
 
   public async getAll(): Promise<Medicine[]> {
-    return await this.repo.find();
+    return await this.repo.find({ relations: { stocks: true } });
   }
 }
 

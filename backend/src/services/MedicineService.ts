@@ -22,6 +22,12 @@ class MedicineService {
 
     return medicine;
   }
+
+  public async getAllMedicine(): Promise<Medicine[]> {
+    const medicines = await this._repo.getAll();
+
+    return medicines;
+  }
 }
 
 export default MedicineService;
