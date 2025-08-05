@@ -1,16 +1,82 @@
 import { useState } from "react";
 import MedFormModal from "../../../components/admin/MedFormModal";
-import type { MedicineForm } from "../../../types/IMedicine";
+import type { Medicine, MedicineForm } from "../../../types/IMedicine";
+import { useMedicines } from "../../../hooks/useMedicine";
+import toast, { Toaster } from "react-hot-toast";
 
 const MedicineList = () => {
   const [openModal, setOpenModal] = useState<boolean>(false);
+  const [editModal, setEditModal] = useState<boolean>(false);
+  const [selectedMedicine, setSelectedMedicine] = useState<Medicine | null>(
+    null
+  );
+
+  const [shouldResetForm, setShouldResetForm] = useState<boolean>(false);
+
+  const [deleteId, setDeleteId] = useState<number>();
+
+  const {
+    medicines,
+    createMedicine,
+    deleteMedicine,
+    updateMedicine,
+    updatePending,
+  } = useMedicines();
 
   const handleModal = () => {
     setOpenModal(!openModal);
   };
 
+  const handleEditModal = (medecine: Medicine) => {
+    setSelectedMedicine(medecine);
+    setEditModal(true);
+  };
+  const handleCloseEditModal = () => {
+    setSelectedMedicine(null);
+    setEditModal(false);
+  };
+
   const handleSubmit = async (data: MedicineForm) => {
+    toast.dismiss();
+
+    try {
+      await createMedicine(data);
+      setOpenModal(false);
+      setShouldResetForm(true);
+      toast.success("Successfully created!");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        toast.error(err.message);
+      }
+    }
+  };
+
+  const handleDelete = async () => {
+    toast.dismiss();
+
+    try {
+      await deleteMedicine(deleteId!);
+
+      toast.success("Successfully deleted!");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        toast.error(err.message);
+      }
+    }
+  };
+
+  const handleUpdate = async (data: MedicineForm) => {
+    toast.dismiss();
     console.log(data);
+    try {
+      await updateMedicine({ id: selectedMedicine!.id, data });
+      handleCloseEditModal();
+      toast.success("Successfully updated!");
+    } catch (err) {
+      if (err instanceof Error) {
+        toast.error(err.message);
+      }
+    }
   };
 
   return (
@@ -46,12 +112,7 @@ const MedicineList = () => {
                 <th scope="col" className="px-6 py-3">
                   Form of Medicines
                 </th>
-                <th scope="col" className="px-6 py-3">
-                  Hand in
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  Expiration
-                </th>
+
                 <th scope="col" className="px-6 py-3">
                   Stock
                 </th>
@@ -64,37 +125,45 @@ const MedicineList = () => {
               </tr>
             </thead>
             <tbody>
-              <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                <th
-                  scope="row"
-                  className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+              {medicines.map((medicine) => (
+                <tr
+                  key={medicine.id}
+                  className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200"
                 >
-                  Abiraterone
-                </th>
-                <td className="px-6 py-4">123mg</td>
-                <td className="px-6 py-4">Tablet</td>
-                <td className="px-6 py-4">2024-08-02</td>
-                <td className="px-6 py-4">2024-08-02</td>
-                <td className="px-6 py-4">36</td>
-                <td className="px-6 py-4">
-                  <div className="bg-green-200 w-fit p-1 rounded-md">Good</div>
-                </td>
+                  <th
+                    scope="row"
+                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                  >
+                    {medicine.med_name}
+                  </th>
+                  <td className="px-6 py-4">{medicine.dosage}</td>
+                  <td className="px-6 py-4">{medicine.form_med}</td>
+                  <td className="px-6 py-4">361</td>
+                  <td className="px-6 py-4">
+                    <div className="bg-green-200 w-fit p-1 rounded-md">
+                      Good
+                    </div>
+                  </td>
 
-                <td className="px-6 py-4 flex gap-4">
-                  <a
-                    href="#"
-                    className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                  >
-                    Edit
-                  </a>
-                  <a
-                    href="#"
-                    className="font-medium text-red-600 dark:text-red-500 hover:underline"
-                  >
-                    Delete
-                  </a>
-                </td>
-              </tr>
+                  <td className="px-6 py-4 flex gap-4">
+                    <button
+                      className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                      onClick={() => handleEditModal(medicine)}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="font-medium text-red-600 dark:text-red-500 hover:underline"
+                      onClick={() => {
+                        setDeleteId(medicine.id);
+                        handleDelete();
+                      }}
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
@@ -104,7 +173,19 @@ const MedicineList = () => {
         openModal={openModal}
         onClose={handleModal}
         onSubmit={handleSubmit}
+        shouldReset={shouldResetForm}
       />
+
+      <MedFormModal
+        mode="edit"
+        openModal={editModal}
+        onClose={handleCloseEditModal}
+        onSubmit={handleUpdate}
+        initialData={selectedMedicine}
+        pending={updatePending}
+      />
+
+      <Toaster />
     </>
   );
 };

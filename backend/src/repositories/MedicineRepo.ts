@@ -23,6 +23,19 @@ class MedicineRepo implements IMedicine {
   public async getAll(): Promise<Medicine[]> {
     return await this.repo.find({ relations: { stocks: true } });
   }
+
+  public async deleteById(id: number): Promise<void> {
+    await this.repo.delete({ id });
+  }
+
+  public async updateById(
+    id: number,
+    data: Partial<Medicine>
+  ): Promise<Medicine> {
+    await this.repo.update(id, data);
+
+    return await this.repo.findOneByOrFail({ id });
+  }
 }
 
 export default new MedicineRepo();

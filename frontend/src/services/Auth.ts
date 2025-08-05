@@ -27,3 +27,15 @@ export const me = async (): Promise<IUserResponse> => {
     throw new Error("An unknown error occurred during login");
   }
 };
+
+export const logout = async (): Promise<void> => {
+  try {
+    await AxiosClientUser.post("/logout");
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      const errorMessage = error.response?.data?.message || "Login failed";
+      throw new Error(errorMessage);
+    }
+    throw new Error("An unknown error occurred during login");
+  }
+};

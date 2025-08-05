@@ -39,6 +39,12 @@ class UserRoutes {
       authentication("ADMIN"),
       UserController.updateUserById.bind(UserController)
     );
+
+    this.router.post(
+      "/logout",
+      authentication(),
+      UserController.logOutUser.bind(UserController)
+    );
   }
 }
 

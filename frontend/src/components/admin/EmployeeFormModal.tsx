@@ -43,18 +43,20 @@ const EmployeeFormModal: React.FC<FormProps> = ({
   const showSpinner = useDelayedLoading(pending, 250);
 
   useEffect(() => {
-    if (shouldReset || !initialData) {
-      setFormData({
-        firstname: "",
-        lastname: "",
-        middlename: "",
-        role: "PHARMACIST",
-        email: "",
-      });
-    } else {
-      setFormData(initialData);
+    if (openModal) {
+      if (shouldReset || !initialData) {
+        setFormData({
+          firstname: "",
+          lastname: "",
+          middlename: "",
+          role: "PHARMACIST",
+          email: "",
+        });
+      } else {
+        setFormData(initialData);
+      }
     }
-  }, [shouldReset, initialData]);
+  }, [openModal, shouldReset, initialData]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>

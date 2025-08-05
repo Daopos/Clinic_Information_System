@@ -82,6 +82,20 @@ class UserController {
     }
   }
 
+  public async logOutUser(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    res.clearCookie("token", {
+      httpOnly: true, // Prevent access from JS (XSS protection)
+      secure: process.env.NODE_ENV === "production", // HTTPS only in production
+      sameSite: "strict", // CSRF protection
+    });
+
+    res.status(200).json({ message: "Successfully logout" });
+  }
+
   public async me(
     req: Request,
     res: Response,

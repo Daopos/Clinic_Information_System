@@ -33,6 +33,7 @@ export default [
       "@typescript-eslint/no-explicit-any": "off",
       "@typescript-eslint/explicit-function-return-type": "warn",
       "@typescript-eslint/explicit-module-boundary-types": "warn",
+      "@typescript-eslint/no-invalid-this": "off",
       "@typescript-eslint/typedef": [
         "error",
         {

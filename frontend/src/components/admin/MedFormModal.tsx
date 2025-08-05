@@ -40,23 +40,31 @@ const MedFormModal: React.FC<FormProps> = ({
   });
 
   useEffect(() => {
-    if (shouldReset || !initialData) {
-      setFormData({
-        med_name: "",
-        dosage: 0,
-        form_med: "",
-      });
-    } else {
-      setFormData(initialData);
+    if (openModal) {
+      if (shouldReset || !initialData) {
+        setFormData({
+          med_name: "",
+          dosage: 0,
+          form_med: "",
+        });
+      } else {
+        setFormData(initialData);
+      }
     }
-  }, [shouldReset, initialData]);
+  }, [openModal, shouldReset, initialData]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
 
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({
+      ...prev,
+      [name]:
+        name === "dosage"
+          ? Number(value) // <-- Convert to number explicitly
+          : value,
+    }));
   };
 
   const handleSubmit = () => {

@@ -28,6 +28,33 @@ class MedicineService {
 
     return medicines;
   }
+
+  public async deleteMedicineById(id: number): Promise<void> {
+    const medicine = await this._repo.findById(id);
+
+    if (!medicine) {
+      throw new ApiError("No medicine Found", 404);
+    }
+
+    await this._repo.deleteById(id);
+  }
+
+  public async updateMedicineById(
+    id: number,
+    data: Partial<Medicine>
+  ): Promise<Medicine> {
+    const medicine = await this._repo.findById(id);
+
+    if (!medicine) {
+      throw new ApiError("No medicine Found", 404);
+    }
+
+    try {
+      return await this._repo.updateById(id, data);
+    } catch (err) {
+      throw new ApiError(err);
+    }
+  }
 }
 
 export default MedicineService;

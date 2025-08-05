@@ -6,7 +6,8 @@ import { AppDataSource } from "./config/data-source";
 import UserRoutes from "./routes/UserRoutes";
 import * as dotenv from "dotenv";
 import { errorHandler } from "./middleware/errorHandler";
-import medicineRoutes from "./routes/medicineRoutes";
+import medicineRoutes from "./routes/MedicineRoutes";
+import { errorValidation } from "./middleware/validationExeption";
 dotenv.config();
 
 class server {
@@ -22,17 +23,14 @@ class server {
         credentials: true, // allow cookies to be sent
       })
     );
+
     //initialize functions
     this.connectDB();
     this.routes();
-    this.middleware();
+    this.app.use(errorValidation);
+    this.app.use(errorHandler);
     this.serve();
   }
-
-  private middleware(): void {
-    this.app.use(errorHandler);
-  }
-
   private connectDB(): void {
     AppDataSource.initialize()
       .then(() => console.log("database connected"))

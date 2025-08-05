@@ -15,7 +15,6 @@
     "typeorm:migration:generate": "npm run typeorm -- migration:generate ./src/migrations/AutoMigration --dataSource ./src/config/data-source.ts",
     "typeorm:migration:run": "npm run typeorm -- migration:run --dataSource ./src/config/data-source.ts",
     "typeorm:migration:revert": "npm run typeorm -- migration:revert --dataSource ./src/config/data-source.ts"
-
   },
   "keywords": [],
   "author": "",
