@@ -4,7 +4,10 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from "typeorm";
+import { MedicineStock } from "./MedicineStock";
+import { MedicineLog } from "./MedicineLog";
 
 export enum UserRole {
   PATIENTS = "PATIENTS",
@@ -40,6 +43,18 @@ export class User {
     default: UserRole.PATIENTS,
   })
   role!: UserRole;
+
+  @OneToMany(() => MedicineStock, (stock) => stock.user, {
+    nullable: true,
+    onDelete: "SET NULL",
+  })
+  stocks!: MedicineStock[];
+
+  @OneToMany(() => MedicineLog, (medicineLog) => medicineLog.user, {
+    nullable: true,
+    onDelete: "SET NULL",
+  })
+  medicineLogs!: MedicineLog[];
 
   @CreateDateColumn()
   createdAt!: Date;

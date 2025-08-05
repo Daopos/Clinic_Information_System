@@ -7,6 +7,7 @@ import {
   OneToMany,
 } from "typeorm";
 import { MedicineStock } from "./MedicineStock";
+import { MedicineLog } from "./MedicineLog";
 
 @Entity({ name: "medicines" })
 export class Medicine {
@@ -24,6 +25,9 @@ export class Medicine {
 
   @OneToMany(() => MedicineStock, (stock) => stock.medicine)
   stocks!: MedicineStock[];
+
+  @OneToMany(() => MedicineLog, (log) => log.medicine)
+  medicineLogs!: MedicineLog[];
 
   @CreateDateColumn()
   createdAt!: Date;
