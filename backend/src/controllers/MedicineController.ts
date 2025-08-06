@@ -1,7 +1,7 @@
 import { NextFunction, Response, Request } from "express";
 import MedicineRepo from "../repositories/MedicineRepo";
 import MedicineService from "../services/MedicineService";
-import { UpdateUserDto } from "../Dto/Medicine/UpdateMedicineDto";
+import { UpdaMedicineDto } from "../Dto/Medicine/UpdateMedicineDto";
 import { validateDto } from "../util/validationDto";
 import { Medicine } from "../entities/Medicine";
 
@@ -83,7 +83,7 @@ class MedicineController {
     }
 
     try {
-      const validatedBody = await validateDto(UpdateUserDto, req.body);
+      const validatedBody = await validateDto(UpdaMedicineDto, req.body);
 
       const medicine = await this.medicineService.updateMedicineById(
         Number(id),

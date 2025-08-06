@@ -1,9 +1,12 @@
-import { plainToInstance } from "class-transformer";
+import { ClassConstructor, plainToInstance } from "class-transformer";
 import { validate, ValidationError } from "class-validator";
 import { ValidationException } from "../middleware/validationExeption";
 
-export const validateDto = async (dtoClass: any, plainObject: any) => {
-  const instance = plainToInstance(dtoClass, plainObject, {});
+export const validateDto = async <T extends object>(
+  dtoClass: ClassConstructor<T>,
+  plainObject: any
+): Promise<T> => {
+  const instance = plainToInstance(dtoClass, plainObject);
 
   const errors = await validate(instance, {
     whitelist: true,

@@ -33,7 +33,7 @@ export class MedicineStock {
   @Column({ nullable: false })
   quantity!: number;
 
-  @Column({ nullable: false, type: "enum", enum: typeEnum })
+  @Column({ nullable: true, type: "enum", enum: typeEnum })
   type!: typeEnum;
 
   @ManyToOne(() => User, (user) => user.stocks, {

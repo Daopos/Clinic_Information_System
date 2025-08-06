@@ -1,6 +1,6 @@
 import { IsString, IsNumber, Length } from "class-validator";
 
-export class UpdateUserDto {
+export class UpdaMedicineDto {
   @IsString({ message: "Medicine name must be a string" })
   @Length(1, undefined, { message: "Medicine name must be longer" })
   med_name: string;
