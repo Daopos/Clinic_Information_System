@@ -46,6 +46,31 @@ class StockService {
 
     return stockDto;
   }
+
+  public async updateStock(
+    id: number,
+    data: Partial<MedicineStock>
+  ): Promise<MedicineStock> {
+    const stock = await this._repo.findById(id);
+
+    if (!stock) {
+      throw new ApiError("Stock not found", 404);
+    }
+
+    try {
+      return await this._repo.updateById(id, data);
+    } catch (err) {
+      throw new ApiError(err);
+    }
+  }
+
+  public async deleteStockById(id: number): Promise<void> {
+    try {
+      await this._repo.deleteById(id);
+    } catch (err) {
+      throw new ApiError(err);
+    }
+  }
 }
 
 export default StockService;

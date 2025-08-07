@@ -7,6 +7,7 @@ import { User } from "../entities/User";
 import { Medicine } from "../entities/Medicine";
 import MedicineRepo from "../repositories/MedicineRepo";
 import UserRepo from "../repositories/UserRepo";
+import { UpdateStockDto } from "../Dto/MedicineStock/UpdateStockDto";
 
 class StockController {
   private stockService: StockService;
@@ -48,6 +49,52 @@ class StockController {
       const medicines = await this.stockService.getAllStockForPharma();
 
       res.status(200).json({ responseData: medicines });
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  public async updateStockById(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    const { id } = req.params;
+    const stockId = Number(id);
+    if (!id || isNaN(stockId)) {
+      res.status(400).json({ message: "Invalid or Missing Id" });
+    }
+
+    try {
+      const validatedBody = await validateDto(UpdateStockDto, req.body);
+      const stock = await this.stockService.updateStock(
+        Number(id),
+        validatedBody as Partial<Medicine>
+      );
+
+      res
+        .status(200)
+        .json({ message: "Successfully Updated", responseData: stock });
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  public async deleteStockById(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    const { id } = req.params;
+
+    if (!id) {
+      res.status(400).json({ message: "Missing Id" });
+      return;
+    }
+
+    try {
+      await this.stockService.deleteStockById(Number(id));
+      res.status(200).json({ message: "Stock Deleted Successfully" });
     } catch (err) {
       next(err);
     }

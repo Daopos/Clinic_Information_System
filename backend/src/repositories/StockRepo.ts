@@ -18,18 +18,44 @@ class StockRepo implements IMedicineStock {
   }
 
   public async getAll(): Promise<ReadStockWithoutUserDto[]> {
-    const stocks = await this.repo.find({ relations: { medicine: true } });
+    const stocks = await this.repo.find({
+      relations: { medicine: true },
+      order: { createdAt: "DESC" },
+    });
 
     return stocks;
   }
+
   public async findByIdWithMedicine(
     id: number
   ): Promise<ReadStockWithoutUserDto | null> {
-    const stock = await this.repo.findOne({
-      where: { id: id },
+    const stock = await this.findOneWithRelations(id);
+    return stock;
+  }
+
+  public async updateById(
+    id: number,
+    data: Partial<MedicineStock>
+  ): Promise<MedicineStock> {
+    await this.repo.update(id, data);
+    return await this.findOneWithRelations(id);
+  }
+
+  public async findById(id: number): Promise<Partial<MedicineStock> | null> {
+    return await this.repo.findOneBy({ id });
+  }
+
+  public async deleteById(id: number): Promise<void> {
+    await this.repo.delete(id);
+  }
+
+  private async findOneWithRelations(
+    id: number
+  ): Promise<MedicineStock | null> {
+    return await this.repo.findOne({
+      where: { id },
       relations: { medicine: true },
     });
-    return stock;
   }
 }
 

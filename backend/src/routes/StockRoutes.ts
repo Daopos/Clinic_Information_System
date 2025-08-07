@@ -20,6 +20,24 @@ class StockRoutes {
       authentication("ADMIN", "PHARMACIST"), //REMOVE ADMIN LATER
       StockController.getAllStockForPharma.bind(StockController)
     );
+
+    this.router.put(
+      "/stock/:id",
+      authentication("ADMIN", "PHARMACIST"),
+      StockController.updateStockById.bind(StockController)
+    );
+
+    this.router.put(
+      "/stock/:id",
+      authentication("ADMIN", "PHARMACIST"),
+      StockController.updateStockById.bind(StockController)
+    );
+
+    this.router.delete(
+      "/stock/:id",
+      authentication("ADMIN"),
+      StockController.deleteStockById.bind(StockController)
+    );
   }
 }
 

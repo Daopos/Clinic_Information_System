@@ -1,5 +1,6 @@
 import PharmacistLayout from "./layouts/PharmacistLayout";
 import Dashboard from "./pages/pharmacist/Dashboard";
+import Medicine from "./pages/pharmacist/Medicine";
 import RoleProtectedRoute from "./utils/ProtextedRoute";
 
 const PharmacistRoutes = {
@@ -8,7 +9,13 @@ const PharmacistRoutes = {
     {
       path: "/pharmacist",
       element: <PharmacistLayout />,
-      children: [{ path: "dashboard", element: <Dashboard /> }],
+      children: [
+        { path: "dashboard", element: <Dashboard /> },
+        {
+          path: "medicines",
+          element: <Medicine />,
+        },
+      ],
     },
   ],
 };

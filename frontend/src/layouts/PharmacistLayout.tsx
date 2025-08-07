@@ -8,11 +8,8 @@ const PharmacistLayout = () => {
 
   // Map of paths to titles
   const pathTitles: { [key: string]: string } = {
-    "/admin/dashboard": "Dashboard",
-    "/admin/appointments": "Appointments",
-    "/admin/medicines": "Medicines",
-    "/admin/patients": "Patients",
-    "/admin/employees": "Employees",
+    "/pharmacist/dashboard": "Dashboard",
+    "/pharmacist/medicines": "Medicines",
   };
 
   const pageTitle = pathTitles[location.pathname] || "Dashboard";
