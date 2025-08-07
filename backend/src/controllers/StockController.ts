@@ -8,6 +8,8 @@ import { Medicine } from "../entities/Medicine";
 import MedicineRepo from "../repositories/MedicineRepo";
 import UserRepo from "../repositories/UserRepo";
 import { UpdateStockDto } from "../Dto/MedicineStock/UpdateStockDto";
+import { ReadStockDto } from "../Dto/MedicineStock/ReadStockDto";
+import { plainToInstance } from "class-transformer";
 
 class StockController {
   private stockService: StockService;
@@ -71,10 +73,10 @@ class StockController {
         Number(id),
         validatedBody as Partial<Medicine>
       );
-
+      const dto = plainToInstance(ReadStockDto, stock);
       res
         .status(200)
-        .json({ message: "Successfully Updated", responseData: stock });
+        .json({ message: "Successfully Updated", responseData: dto });
     } catch (err) {
       next(err);
     }

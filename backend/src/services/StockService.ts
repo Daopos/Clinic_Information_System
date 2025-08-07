@@ -65,6 +65,12 @@ class StockService {
   }
 
   public async deleteStockById(id: number): Promise<void> {
+    const stock = await this._repo.findById(id);
+
+    if (!stock) {
+      throw new ApiError("Stock not found", 404);
+    }
+
     try {
       await this._repo.deleteById(id);
     } catch (err) {

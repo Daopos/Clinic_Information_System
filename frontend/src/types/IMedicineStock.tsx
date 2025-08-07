@@ -1,6 +1,17 @@
+import type { Medicine } from "./IMedicine";
+
 export interface MedicineStock {
   id: number;
-  expiration: Date;
-  stock: number;
-  createdAt: Date;
+  expiration: string;
+  quantity: number;
+  hand_in: string;
+  medicine: Medicine;
+}
+
+export interface MedicineStockForm {
+  id?: number;
+  expiration: string;
+  quantity: number;
+  hand_in: string;
+  medicineId: number;
 }
