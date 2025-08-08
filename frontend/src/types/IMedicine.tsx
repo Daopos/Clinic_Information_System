@@ -11,3 +11,8 @@ export interface Medicine {
   dosage: number;
   form_med: string;
 }
+
+export interface MedicineOptions {
+  id: number;
+  med_name: string;
+}

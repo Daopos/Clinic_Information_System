@@ -1,6 +1,10 @@
 import { AxiosError } from "axios";
 import AxiosClientUser from "../axios-client/axios-client";
-import type { Medicine, MedicineForm } from "../types/IMedicine";
+import type {
+  Medicine,
+  MedicineForm,
+  MedicineOptions,
+} from "../types/IMedicine";
 import type { ApiResponse } from "../types/ApiResponse";
 
 const createMedicine = async (data: MedicineForm) => {
@@ -64,9 +68,24 @@ const updateMedicineById = async (
   }
 };
 
+const getMedicineOptions = async (): Promise<MedicineOptions[]> => {
+  try {
+    const response = await AxiosClientUser.get("/medicines/options");
+
+    return response.data.responseData;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      const errorMessage = error.response?.data?.message || "failed";
+      throw new Error(errorMessage);
+    }
+    throw new Error("An unknown error occurred during login");
+  }
+};
+
 export default {
   createMedicine,
   getMedicines,
   deleteMedicineById,
   updateMedicineById,
+  getMedicineOptions,
 };

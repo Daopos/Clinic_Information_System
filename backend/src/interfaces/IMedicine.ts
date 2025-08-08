@@ -6,4 +6,5 @@ export default interface IMedicine {
   findById(id: number): Promise<Partial<Medicine> | null>;
   deleteById(id: number): Promise<void>;
   updateById(id: number, data: Partial<Medicine>): Promise<Medicine>;
+  getMedicineOptions(): Promise<Partial<Medicine[]>>;
 }

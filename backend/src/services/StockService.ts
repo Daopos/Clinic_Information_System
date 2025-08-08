@@ -41,7 +41,6 @@ class StockService {
 
   public async getAllStockForPharma(): Promise<ReadStockWithoutUserDto[]> {
     const stocks = await this._repo.getAll();
-
     const stockDto = plainToInstance(ReadStockWithoutUserDto, stocks);
 
     return stockDto;

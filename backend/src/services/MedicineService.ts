@@ -55,6 +55,14 @@ class MedicineService {
       throw new ApiError(err);
     }
   }
+
+  public async getMedicineOptions(): Promise<Partial<Medicine[]>> {
+    try {
+      return await this._repo.getMedicineOptions();
+    } catch (err) {
+      throw new ApiError(err);
+    }
+  }
 }
 
 export default MedicineService;

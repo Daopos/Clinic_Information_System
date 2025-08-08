@@ -97,6 +97,20 @@ class MedicineController {
       next(err);
     }
   }
+
+  public async getMedicineOptions(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      const medicinOptions = await this.medicineService.getMedicineOptions();
+
+      res.status(200).json({ responseData: medicinOptions });
+    } catch (err) {
+      next(err);
+    }
+  }
 }
 
 export default new MedicineController();

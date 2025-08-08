@@ -8,16 +8,17 @@ import type { MedicineStockForm } from "../../types/IMedicineStock";
 const Medicine = () => {
   const [openModal, setOpenModal] = useState<boolean>(false);
 
-  const [resetForm, setResetForm] = useState<boolean>(false);
+  const [resetForm, setShouldResetForm] = useState<boolean>(false);
 
-  const { medicineStocks } = useMedicineStock();
+  const { medicineStocks, createStock, createPending } = useMedicineStock();
 
   const handleSubmit = async (data: MedicineStockForm) => {
     toast.dismiss();
-
+    console.log(data);
     try {
-      console.log(data);
+      await createStock(data);
       setOpenModal(false);
+      setShouldResetForm(true);
       toast.success("Successfully created!");
     } catch (err: unknown) {
       if (err instanceof Error) {
@@ -82,7 +83,10 @@ const Medicine = () => {
             </thead>
             <tbody>
               {medicineStocks.map((stock) => (
-                <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <tr
+                  key={stock.id}
+                  className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200"
+                >
                   <th
                     scope="row"
                     className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
@@ -122,6 +126,8 @@ const Medicine = () => {
         openModal={openModal}
         onClose={handleModal}
         onSubmit={handleSubmit}
+        pending={createPending}
+        shouldReset={resetForm}
       />
 
       <Toaster />

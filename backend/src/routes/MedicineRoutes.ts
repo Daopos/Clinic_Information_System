@@ -33,6 +33,12 @@ class MedecineRoutes {
       authentication("ADMIN"),
       MedicineController.updateMedicineeById.bind(MedicineController)
     );
+
+    this.router.get(
+      "/medicines/options",
+      authentication("ADMIN", "PHARMACIST"), //Remove Admin later
+      MedicineController.getMedicineOptions.bind(MedicineController)
+    );
   }
 }
 

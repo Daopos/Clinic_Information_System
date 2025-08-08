@@ -4,6 +4,7 @@ import { Type } from "class-transformer";
 export class CreateStockDto {
   @IsDefined()
   @IsNumber()
+  @Type(() => Number)
   medicineId: number;
 
   @IsDefined()

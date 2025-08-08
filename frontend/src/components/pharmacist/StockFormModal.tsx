@@ -7,10 +7,13 @@ import {
   ModalBody,
   ModalFooter,
   ModalHeader,
+  Select,
   Spinner,
   TextInput,
 } from "flowbite-react";
 import { useDelayedLoading } from "../../utils/useDelayedLoading";
+import type { MedicineOptions } from "../../types/IMedicine";
+import medicineService from "../../services/medicineService";
 
 interface FormProps {
   openModal: boolean;
@@ -33,11 +36,26 @@ const StockFormModal: React.FC<FormProps> = ({
 }) => {
   const showSpinner = useDelayedLoading(pending, 250);
 
+  const [medicineOptions, setMedicineOptions] = useState<MedicineOptions[]>([]);
+
+  useEffect(() => {
+    getMedicineOptions();
+  }, []);
+
+  const getMedicineOptions = async () => {
+    try {
+      const options = await medicineService.getMedicineOptions();
+      setMedicineOptions(options);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const [formData, setFormData] = useState<MedicineStockForm>({
     expiration: "",
     hand_in: "",
     quantity: 0,
-    medicineId: 0,
+    medicineId: -1,
   });
 
   useEffect(() => {
@@ -61,7 +79,10 @@ const StockFormModal: React.FC<FormProps> = ({
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      [name]:
+        name === "quantity"
+          ? Number(value) // <-- Convert to number explicitly
+          : value,
     }));
   };
 
@@ -80,9 +101,26 @@ const StockFormModal: React.FC<FormProps> = ({
             <div className="mb-2 block">
               <Label htmlFor="med_name">Medicine name</Label>
             </div>
+            <Select
+              name="medicineId"
+              id="medicineId"
+              onChange={handleChange}
+              value={formData.medicineId}
+              required
+            >
+              <option value="">Select a medicine</option>
+              {medicineOptions.map((option) => (
+                <option value={option.id}>{option.med_name}</option>
+              ))}
+            </Select>
+          </div>
+          <div>
+            <div className="mb-2 block">
+              <Label htmlFor="quantity">Quantity</Label>
+            </div>
             <TextInput
-              name="med_name"
-              id="med_name"
+              name="quantity"
+              id="quantity"
               type="text"
               required
               shadow
@@ -91,12 +129,12 @@ const StockFormModal: React.FC<FormProps> = ({
           </div>
           <div>
             <div className="mb-2 block">
-              <Label htmlFor="form_med">Form of medicine</Label>
+              <Label htmlFor="hand_in">Hand in</Label>
             </div>
             <TextInput
-              name="form_med"
-              id="form_med"
-              type="text"
+              name="hand_in"
+              id="hand_in"
+              type="date"
               required
               shadow
               onChange={handleChange}
@@ -104,12 +142,12 @@ const StockFormModal: React.FC<FormProps> = ({
           </div>
           <div>
             <div className="mb-2 block">
-              <Label htmlFor="dosage">Dosage</Label>
+              <Label htmlFor="expiration">Expiration</Label>
             </div>
             <TextInput
-              name="dosage"
-              id="dosage"
-              type="text"
+              name="expiration"
+              id="expiration"
+              type="date"
               required
               shadow
               onChange={handleChange}

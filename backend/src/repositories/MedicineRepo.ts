@@ -36,6 +36,12 @@ class MedicineRepo implements IMedicine {
 
     return await this.repo.findOneByOrFail({ id });
   }
+
+  public async getMedicineOptions(): Promise<Partial<Medicine[]>> {
+    return await this.repo.find({
+      select: ["id", "med_name"],
+    });
+  }
 }
 
 export default new MedicineRepo();
