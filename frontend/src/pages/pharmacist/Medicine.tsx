@@ -4,8 +4,14 @@ import { transformDate } from "../../utils/transformDate";
 import StockFormModal from "../../components/pharmacist/StockFormModal";
 import toast, { Toaster } from "react-hot-toast";
 import type { MedicineStockForm } from "../../types/IMedicineStock";
+import { Button } from "flowbite-react";
+import { UserMinusIcon } from "@heroicons/react/24/outline";
+import LogFormModal from "../../components/pharmacist/LogFormModal";
+import type { MedicineLogForm } from "../../types/IMedicineLog";
 
 const Medicine = () => {
+  //CREATE STOCK
+
   const [openModal, setOpenModal] = useState<boolean>(false);
 
   const [resetForm, setShouldResetForm] = useState<boolean>(false);
@@ -29,6 +35,24 @@ const Medicine = () => {
 
   const handleModal = () => {
     setOpenModal(!openModal);
+  };
+
+  //
+
+  // CREATE medicine log
+
+  const [openLogModal, setOpenLogModal] = useState<boolean>(false);
+  const [selectedStock, setSelectedStock] = useState<{
+    medicineStockId: number;
+    medicineId: number;
+  } | null>(null);
+
+  const handleLogModal = () => {
+    setOpenLogModal(!openLogModal);
+  };
+
+  const handleSubmitLog = async (data: MedicineLogForm) => {
+    console.log(data);
   };
 
   return (
@@ -76,6 +100,9 @@ const Medicine = () => {
                 <th scope="col" className="px-6 py-3">
                   Status
                 </th>
+                <th scope="col" className="px-6 py-3 w-max">
+                  Give
+                </th>
                 <th scope="col" className="px-6 py-3">
                   Actions
                 </th>
@@ -105,7 +132,21 @@ const Medicine = () => {
                       Good
                     </div>
                   </td>
-
+                  <td className="w-max px-6 py-4">
+                    <Button
+                      className="bg-emerald-500 hover:bg-emerald-600 "
+                      pill
+                      onClick={() => {
+                        setSelectedStock({
+                          medicineStockId: stock.id,
+                          medicineId: stock.medicine?.id || -1,
+                        });
+                        setOpenLogModal(true);
+                      }}
+                    >
+                      <UserMinusIcon className="h-6 w-6 " />
+                    </Button>
+                  </td>
                   <td className="px-6 py-4 flex gap-4">
                     <button className="font-medium text-blue-600 dark:text-blue-500 hover:underline">
                       Edit
@@ -128,6 +169,13 @@ const Medicine = () => {
         onSubmit={handleSubmit}
         pending={createPending}
         shouldReset={resetForm}
+      />
+
+      <LogFormModal
+        openModal={openLogModal}
+        onClose={handleLogModal}
+        onSubmit={handleSubmitLog}
+        selectedStock={selectedStock} // pass here
       />
 
       <Toaster />

@@ -9,6 +9,7 @@ import { errorHandler } from "./middleware/errorHandler";
 import medicineRoutes from "./routes/MedicineRoutes";
 import { errorValidation } from "./middleware/validationExeption";
 import StockRoutes from "./routes/StockRoutes";
+import MedicineLogRoutes from "./routes/MedicineLogRoutes";
 dotenv.config();
 
 class server {
@@ -47,6 +48,9 @@ class server {
 
     //medicine stock Routes
     this.app.use("/api/v1", StockRoutes);
+
+    //medicine log Routes
+    this.app.use("/api/v1", MedicineLogRoutes);
   }
 
   private serve(): void {

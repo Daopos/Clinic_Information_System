@@ -56,7 +56,7 @@ export class User {
   })
   medicineLogs!: MedicineLog[];
 
-  @OneToMany(() => MedicineLog, (medicineLog) => medicineLog.user, {
+  @OneToMany(() => MedicineLog, (medicineLog) => medicineLog.pharmacist, {
     nullable: true,
     onDelete: "SET NULL",
   })

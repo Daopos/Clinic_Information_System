@@ -43,7 +43,7 @@ export class MedicineLog {
     nullable: true,
   })
   @JoinColumn({ name: "pharmacistId" })
-  fromUser!: User;
+  pharmacist!: User;
 
   @Column({ nullable: true })
   pharmacistId?: number;

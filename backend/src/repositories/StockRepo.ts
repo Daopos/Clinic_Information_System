@@ -49,6 +49,11 @@ class StockRepo implements IMedicineStock {
     await this.repo.delete(id);
   }
 
+  public async consumeStock(stockId: number, qty: number): Promise<void> {
+    await this.repo.decrement({ id: stockId }, "quantity", qty);
+  }
+
+  //Reuasable find Id with Rleationship
   private async findOneWithRelations(
     id: number
   ): Promise<MedicineStock | null> {
