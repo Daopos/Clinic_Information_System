@@ -5,9 +5,11 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
+  JoinColumn,
 } from "typeorm";
 import { Medicine } from "./Medicine";
 import { User } from "./User";
+import { MedicineStock } from "./MedicineStock";
 
 @Entity({ name: "medicine_logs" })
 export class MedicineLog {
@@ -25,11 +27,26 @@ export class MedicineLog {
   })
   medicine!: Medicine;
 
+  @ManyToOne(() => MedicineStock, (stock) => stock.medicineLogs, {
+    onDelete: "SET NULL",
+  })
+  medicineStock!: MedicineStock;
+
   @ManyToOne(() => User, (user) => user.medicineLogs, {
     onDelete: "SET NULL",
     nullable: true,
   })
   user!: User;
+
+  @ManyToOne(() => User, (user) => user.medcineLogPharma, {
+    onDelete: "SET NULL",
+    nullable: true,
+  })
+  @JoinColumn({ name: "pharmacistId" })
+  fromUser!: User;
+
+  @Column({ nullable: true })
+  pharmacistId?: number;
 
   @CreateDateColumn()
   createdAt!: Date;

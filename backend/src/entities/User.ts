@@ -56,6 +56,12 @@ export class User {
   })
   medicineLogs!: MedicineLog[];
 
+  @OneToMany(() => MedicineLog, (medicineLog) => medicineLog.user, {
+    nullable: true,
+    onDelete: "SET NULL",
+  })
+  medcineLogPharma!: MedicineLog[];
+
   @CreateDateColumn()
   createdAt!: Date;
 

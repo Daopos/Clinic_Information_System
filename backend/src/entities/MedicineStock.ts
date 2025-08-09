@@ -5,9 +5,11 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
+  OneToMany,
 } from "typeorm";
 import { Medicine } from "./Medicine";
 import { User } from "./User";
+import { MedicineLog } from "./MedicineLog";
 
 enum typeEnum {
   IN = "IN",
@@ -40,6 +42,11 @@ export class MedicineStock {
     onDelete: "CASCADE",
   })
   user!: User;
+
+  @OneToMany(() => MedicineLog, (medicineLog) => medicineLog.medicineStock, {
+    onDelete: "CASCADE",
+  })
+  medicineLogs!: MedicineLog[];
 
   @CreateDateColumn()
   createdAt!: Date;
