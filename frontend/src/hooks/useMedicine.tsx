@@ -62,14 +62,6 @@ export const useMedicines = () => {
     },
   });
 
-  const consumeMedicine = (id: number, amount: number) => {
-    queryClient.setQueryData<Medicine[]>(["medicines"], (old = []) =>
-      old.map((med) =>
-        med.id === id ? { ...med, quantity: med.quantity - amount } : med
-      )
-    );
-  };
-
   return {
     //fetch data
     medicines,
@@ -95,8 +87,5 @@ export const useMedicines = () => {
     updateSuccess,
     updatePending,
     updateError,
-
-    //consume minus quantity
-    consumeMedicine,
   };
 };

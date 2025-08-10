@@ -1,3 +1,10 @@
+export interface PaginatedMedicineLogs {
+  data: MedicineLog[];
+  total: number;
+  page: number;
+  totalPages: number;
+}
+
 export interface MedicineLogForm {
   dispensed_to: string;
   quantity_dispensed: number;
@@ -6,7 +13,16 @@ export interface MedicineLogForm {
 }
 
 export interface MedicineLog {
+  id: number;
   dispensed_to: string;
   quantity_dispensed: number;
-  pharmacistId: number;
+  createdAt: string;
+  medicine: {
+    med_name: string;
+    dosage: number;
+    form_med: string;
+  };
+  medicineStock: {
+    expiration: string;
+  };
 }
