@@ -8,6 +8,7 @@ import { Button } from "flowbite-react";
 import { UserMinusIcon } from "@heroicons/react/24/outline";
 import LogFormModal from "../../components/pharmacist/LogFormModal";
 import type { MedicineLogForm } from "../../types/IMedicineLog";
+import { useMedicineLog } from "../../hooks/useMedicineLog";
 
 const Medicine = () => {
   //CREATE STOCK
@@ -47,12 +48,27 @@ const Medicine = () => {
     medicineId: number;
   } | null>(null);
 
+  const { createLog } = useMedicineLog();
+  const { consumeMedicine } = useMedicineStock();
+
   const handleLogModal = () => {
     setOpenLogModal(!openLogModal);
   };
 
   const handleSubmitLog = async (data: MedicineLogForm) => {
+    toast.dismiss();
     console.log(data);
+
+    try {
+      await createLog(data);
+      consumeMedicine(data.medicineStockId, data.quantity_dispensed);
+      setOpenLogModal(false);
+      toast.success("Successfully created!");
+    } catch (err) {
+      if (err instanceof Error) {
+        toast.error(err.message);
+      }
+    }
   };
 
   return (

@@ -1,6 +1,9 @@
 import { NavLink } from "react-router";
-import { Squares2X2Icon } from "@heroicons/react/24/outline";
-import { BeakerIcon } from "@heroicons/react/24/outline";
+import {
+  BeakerIcon,
+  BookOpenIcon,
+  Squares2X2Icon,
+} from "@heroicons/react/24/outline";
 
 const Sidebar = () => {
   const linkClass =
@@ -35,6 +38,17 @@ const Sidebar = () => {
             >
               <BeakerIcon className="h-6 w-6" />
               Medicines
+            </NavLink>
+          </li>
+          <li className="px-4 ">
+            <NavLink
+              to="/pharmacist/medicinelogs"
+              className={({ isActive }) =>
+                `${linkClass} ${isActive ? activeClass : ""}`
+              }
+            >
+              <BookOpenIcon className="h-6 w-6" />
+              Medicine Log
             </NavLink>
           </li>
         </ul>

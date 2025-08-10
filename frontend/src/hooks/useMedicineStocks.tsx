@@ -31,6 +31,16 @@ export const useMedicineStock = () => {
     },
   });
 
+  const consumeMedicine = (id: number, amount: number) => {
+    queryClient.setQueryData<MedicineStock[]>(
+      ["medicineStockPharma"],
+      (old = []) =>
+        old.map((med) =>
+          med.id === id ? { ...med, quantity: med.quantity - amount } : med
+        )
+    );
+  };
+
   return {
     //retreive Data
     medicineStocks,
@@ -44,5 +54,8 @@ export const useMedicineStock = () => {
     createSuccess,
     createPending,
     createError,
+
+    //consume quantity(Minus)
+    consumeMedicine,
   };
 };
