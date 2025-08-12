@@ -8,6 +8,7 @@ import {
 } from "typeorm";
 import { MedicineStock } from "./MedicineStock";
 import { MedicineLog } from "./MedicineLog";
+import { Appointment } from "./Appointment";
 
 export enum UserRole {
   PATIENTS = "PATIENTS",
@@ -61,6 +62,18 @@ export class User {
     onDelete: "SET NULL",
   })
   medcineLogPharma!: MedicineLog[];
+
+  @OneToMany(() => Appointment, (appointment) => appointment.patient, {
+    nullable: true,
+    onDelete: "SET NULL",
+  })
+  appointmentPatient!: Appointment[];
+
+  @OneToMany(() => Appointment, (appointment) => appointment.dentist, {
+    nullable: true,
+    onDelete: "SET NULL",
+  })
+  appointmentDentist!: Appointment[];
 
   @CreateDateColumn()
   createdAt!: Date;

@@ -15,6 +15,12 @@ class MedicineLogRoutes {
       authentication("ADMIN", "PHARMACIST"), //Remoe ADMIN later
       MedicineLogCotroller.createMedicineLog.bind(MedicineLogCotroller)
     );
+
+    this.router.get(
+      "/medicinelogs",
+      authentication("ADMIN", "PHARMACIST"),
+      MedicineLogCotroller.getMedicineLogs.bind(MedicineLogCotroller)
+    );
   }
 }
 

@@ -50,6 +50,26 @@ class MedicineLogController {
       next(err);
     }
   }
+
+  public async getMedicineLogs(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      const page = Number(req.query.page) || 1;
+      const limit = Number(req.query.limit) || 10;
+
+      const logs = await this.medecineLogService.getAllMedicineLogs(
+        page,
+        limit
+      );
+
+      res.status(200).json({ responseData: logs });
+    } catch (err) {
+      next(err);
+    }
+  }
 }
 
 export default new MedicineLogController();

@@ -3,6 +3,7 @@ import Login from "./pages/auth/Login";
 import GuestOnlyRoute from "./utils/GuestOnlyRoute";
 import AdminRoutes from "./routesAdmin";
 import PharmacistRoutes from "./routesPharmacist";
+import dentistRoutes from "./routesDentist";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -19,5 +20,6 @@ const router = createBrowserRouter([
   },
   AdminRoutes,
   PharmacistRoutes,
+  dentistRoutes,
 ]);
 export default router;

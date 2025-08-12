@@ -1,5 +1,5 @@
+import { MedicineLog } from "./../entities/MedicineLog";
 import { Medicine } from "../entities/Medicine";
-import { MedicineLog } from "../entities/MedicineLog";
 import { MedicineStock } from "../entities/MedicineStock";
 import IMedicine from "../interfaces/IMedicine";
 import ImedicineLog from "../interfaces/IMedicineLog";
@@ -41,6 +41,25 @@ class MedicineLogService {
     } catch (err) {
       throw new ApiError(err);
     }
+  }
+
+  public async getAllMedicineLogs(
+    page: number,
+    limit: number
+  ): Promise<{
+    data: MedicineLog[];
+    total: number;
+    page: number;
+    totalPages: number;
+  }> {
+    const [logs, total] = await this._repo.getAllLogs(page, limit);
+
+    return {
+      data: logs,
+      total,
+      page,
+      totalPages: Math.ceil(total / limit),
+    };
   }
 }
 
