@@ -1,0 +1,48 @@
+import { NextFunction, Response, Request } from "express";
+import AppointmentRepo from "../repositories/AppointmentRepo";
+import AppointmentService from "../services/AppoinmentService";
+import { validateDto } from "../util/validationDto";
+import { CreateAppointmentDto } from "../Dto/Appointment/CreateAppointmentDto";
+import { User } from "../entities/User";
+import UserRepo from "../repositories/UserRepo";
+import { statusEnum } from "../entities/Appointment";
+
+class AppointmentController {
+  private readonly _appointmentService: AppointmentService;
+
+  constructor() {
+    this._appointmentService = new AppointmentService(
+      AppointmentRepo,
+      UserRepo
+    );
+  }
+
+  public async createAppointment(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    const id = (req as any).id;
+
+    try {
+      const validateBody = await validateDto(CreateAppointmentDto, req.body);
+      const payload = {
+        ...validateBody,
+        status: statusEnum.Pending,
+        patient: { id: id } as User,
+      };
+
+      const appointment = await this._appointmentService.createAppointment(
+        payload
+      );
+
+      res
+        .status(201)
+        .json({ message: "Created Successfully", responseData: appointment });
+    } catch (err) {
+      next(err);
+    }
+  }
+}
+
+export default new AppointmentController();

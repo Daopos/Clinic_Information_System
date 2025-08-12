@@ -9,7 +9,7 @@ import {
 } from "typeorm";
 import { User } from "./User";
 
-enum statusEnum {
+export enum statusEnum {
   Approved = "Approved",
   Declined = "Declined",
   Pending = "Pending",
