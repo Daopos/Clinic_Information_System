@@ -34,4 +34,11 @@ export class Medicine {
 
   @UpdateDateColumn()
   updatedAt!: Date;
+
+  //not store in DB
+  stocksCount?: number;
+
+  status?: string;
+
+  totalQuantity?: number;
 }

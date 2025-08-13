@@ -120,6 +120,9 @@ const Employees = () => {
                   Role
                 </th>
                 <th scope="col" className="px-6 py-3">
+                  Email
+                </th>
+                <th scope="col" className="px-6 py-3">
                   Actions
                 </th>
               </tr>
@@ -140,10 +143,12 @@ const Employees = () => {
                     {`${employee.lastname}, ${employee.firstname} ${employee.middlename}`}
                   </td>
                   <td className="px-6 py-4">{employee.role}</td>
+                  <td className="px-6 py-4">{employee.email}</td>
+
                   <td className="px-6 py-4 flex gap-4">
-                    <button className="font-medium text-emerald-600 dark:text-emerald-500 hover:underline">
+                    {/* <button className="font-medium text-emerald-600 dark:text-emerald-500 hover:underline">
                       View
-                    </button>
+                    </button> */}
                     <button
                       className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                       onClick={() => handleEditModal(employee)}

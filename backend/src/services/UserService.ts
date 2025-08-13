@@ -2,6 +2,8 @@ import { User } from "../entities/User";
 import IUser from "../interfaces/IUser";
 import { ApiError } from "../middleware/errorHandler";
 import bcrypt from "bcrypt";
+import { sendEmailPassword } from "../util/generateEmail";
+import { generatePassword } from "../util/generatePassword";
 
 class UserService {
   constructor(private _repo: IUser) {}
@@ -14,16 +16,19 @@ class UserService {
     if (checkUser) {
       throw new ApiError("Email is already used", 409);
     }
+    const rawPassword = generatePassword();
 
-    if (!data.password) {
-      data.password = "123"; // fallback if password is missing
-    }
+    data.password = rawPassword; // fallback if password is missing
+
     try {
       const salt = await bcrypt.genSalt(10);
       const hashPassword = await bcrypt.hash(data.password!, salt);
       data.password = hashPassword;
       const user = await this._repo.create(data);
       const { password, ...safeUser } = user;
+
+      sendEmailPassword(data.email, rawPassword);
+
       return safeUser;
     } catch (err) {
       console.log(err);

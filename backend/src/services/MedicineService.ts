@@ -26,7 +26,19 @@ class MedicineService {
   public async getAllMedicine(): Promise<Medicine[]> {
     const medicines = await this._repo.getAll();
 
-    return medicines;
+    const final = medicines.map((m) => ({
+      ...m,
+      status:
+        m.totalQuantity >= 50
+          ? "High"
+          : m.totalQuantity >= 20
+          ? "Good"
+          : m.totalQuantity >= 1
+          ? "Low"
+          : "Out of Stock",
+    }));
+
+    return final;
   }
 
   public async deleteMedicineById(id: number): Promise<void> {

@@ -21,7 +21,22 @@ class MedicineRepo implements IMedicine {
   }
 
   public async getAll(): Promise<Medicine[]> {
-    return await this.repo.find({ relations: { stocks: true } });
+    return await this.repo
+      .createQueryBuilder("m")
+      .leftJoin("m.stocks", "s")
+      .select([
+        "m.id AS id",
+        "m.med_name AS med_name",
+        "m.dosage AS dosage",
+        "m.form_med AS form_med",
+        "m.createdAt AS createdAt",
+        "m.updatedAt AS updatedAt",
+      ])
+      .addSelect("COALESCE(SUM(s.quantity), 0)", "totalQuantity")
+      .groupBy("m.id")
+      .getRawMany();
+
+    // return await this.repo.find({ relations: { stocks: true } });
   }
 
   public async deleteById(id: number): Promise<void> {

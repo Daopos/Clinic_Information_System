@@ -3,6 +3,7 @@ import UserRepo from "../repositories/UserRepo";
 import UserService from "../services/UserService";
 import { ApiError } from "../middleware/errorHandler";
 import { generateToken } from "../util/generateToken";
+import { UserRole } from "../entities/User";
 
 class UserController {
   private userService: UserService;
@@ -31,8 +32,45 @@ class UserController {
       });
       return;
     }
+
     try {
       const data = await this.userService.createUser(req.body);
+
+      res.status(201).json({ responseData: data });
+      return;
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  public async signupUser(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    const { firstname, email } = req.body;
+
+    if (!firstname || !email) {
+      res.status(400).json({
+        message: "firstname, email, password, and role are required.",
+      });
+      return;
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      res.status(400).json({
+        message: "Invalid email format.",
+      });
+      return;
+    }
+
+    const payload = {
+      ...req.body,
+      role: UserRole.PATIENTS,
+    };
+
+    try {
+      const data = await this.userService.createUser(payload);
 
       res.status(201).json({ responseData: data });
       return;

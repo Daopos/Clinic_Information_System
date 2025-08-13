@@ -21,6 +21,7 @@ const MedicineList = () => {
     deleteMedicine,
     updateMedicine,
     updatePending,
+    refetch,
   } = useMedicines();
 
   const handleModal = () => {
@@ -70,6 +71,8 @@ const MedicineList = () => {
     console.log(data);
     try {
       await updateMedicine({ id: selectedMedicine!.id, data });
+      refetch();
+
       handleCloseEditModal();
       toast.success("Successfully updated!");
     } catch (err) {
@@ -138,10 +141,20 @@ const MedicineList = () => {
                   </th>
                   <td className="px-6 py-4">{medicine.dosage}</td>
                   <td className="px-6 py-4">{medicine.form_med}</td>
-                  <td className="px-6 py-4">361</td>
+                  <td className="px-6 py-4">{medicine.totalQuantity}</td>
                   <td className="px-6 py-4">
-                    <div className="bg-green-200 w-fit p-1 rounded-md">
-                      Good
+                    <div
+                      className={`${
+                        medicine.status === "High"
+                          ? "bg-cyan-200"
+                          : medicine.status === "Good"
+                          ? "bg-green-200"
+                          : medicine.status === "Low"
+                          ? "bg-amber-300"
+                          : "bg-red-200"
+                      } w-fit p-1 rounded-md`}
+                    >
+                      {medicine.status}
                     </div>
                   </td>
 
