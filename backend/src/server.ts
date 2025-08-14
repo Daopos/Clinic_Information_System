@@ -22,7 +22,7 @@ class server {
     this.app.use(express.json());
     this.app.use(
       cors({
-        origin: "http://localhost:5173", // your frontend origin
+        origin: ["http://localhost:5173", "http://localhost:8081"], // your frontend origin
         credentials: true, // allow cookies to be sent
       })
     );

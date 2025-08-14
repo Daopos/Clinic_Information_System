@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import UserRepo from "../repositories/UserRepo";
 import UserService from "../services/UserService";
 import { ApiError } from "../middleware/errorHandler";
-import { generateToken } from "../util/generateToken";
+import { generateToken, generateTokenMobile } from "../util/generateToken";
 import { UserRole } from "../entities/User";
 
 class UserController {
@@ -70,9 +70,15 @@ class UserController {
     };
 
     try {
-      const data = await this.userService.createUser(payload);
+      const data = await this.userService.signupUser(payload);
 
-      res.status(201).json({ responseData: data });
+      const tokenPayload = {
+        id: data.id,
+        role: data.role,
+      };
+      const token = generateTokenMobile(tokenPayload);
+
+      res.status(201).json({ responseData: data, token: token });
       return;
     } catch (err) {
       next(err);
@@ -115,6 +121,36 @@ class UserController {
       res
         .status(200)
         .json({ message: "Successfullly login", responseData: data });
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  public async loginUserMobile(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      res.status(401).json({ message: "Email and passowrd are required!" });
+      throw new ApiError("email or password is missing!", 401);
+    }
+
+    try {
+      const user = await this.userService.loginUser(email, password);
+
+      const payload = {
+        id: user.id,
+        role: user.role,
+      };
+      const token = generateTokenMobile(payload);
+
+      res.status(200).json({
+        message: "Successfullly login",
+        token: token,
+      });
     } catch (err) {
       next(err);
     }

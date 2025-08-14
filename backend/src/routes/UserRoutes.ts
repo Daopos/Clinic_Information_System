@@ -15,8 +15,13 @@ class UserRoutes {
       authentication("ADMIN"),
       UserController.createUser.bind(UserController)
     );
+    // login in web
     this.router.post("/login", UserController.loginUser.bind(UserController));
-
+    //login in mobile
+    this.router.post(
+      "/loginmobile",
+      UserController.loginUserMobile.bind(UserController)
+    );
     this.router.post("/signup", UserController.signupUser.bind(UserController));
 
     this.router.get(

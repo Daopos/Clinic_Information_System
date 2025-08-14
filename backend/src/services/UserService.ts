@@ -36,6 +36,28 @@ class UserService {
     }
   }
 
+  public async signupUser(
+    data: Partial<User>
+  ): Promise<Omit<User, "password">> {
+    const checkUser = await this._repo.findByEmail(data.email);
+
+    if (checkUser) {
+      throw new ApiError("Email is already used", 409);
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashPassword = await bcrypt.hash(data.password!, salt);
+    data.password = hashPassword;
+    try {
+      const user = await this._repo.create(data);
+      const { password, ...safeUser } = user;
+
+      return safeUser;
+    } catch (err) {
+      throw new ApiError(err as string, 400);
+    }
+  }
+
   public async getUserById(id: number): Promise<User | null> {
     const user = await this._repo.findById(id);
 
