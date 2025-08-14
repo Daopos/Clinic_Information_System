@@ -43,16 +43,44 @@ class MedicineLogService {
     }
   }
 
+  // public async getAllMedicineLogs(
+  //   page: number,
+  //   limit: number
+  // ): Promise<{
+  //   data: MedicineLog[];
+  //   total: number;
+  //   page: number;
+  //   totalPages: number;
+  // }> {
+  //   const [logs, total] = await this._repo.getAllLogs(page, limit);
+
+  //   return {
+  //     data: logs,
+  //     total,
+  //     page,
+  //     totalPages: Math.ceil(total / limit),
+  //   };
+  // }
+
   public async getAllMedicineLogs(
     page: number,
-    limit: number
+    limit: number,
+    startDate?: Date,
+    endDate?: Date,
+    searchTerm?: string
   ): Promise<{
     data: MedicineLog[];
     total: number;
     page: number;
     totalPages: number;
   }> {
-    const [logs, total] = await this._repo.getAllLogs(page, limit);
+    const [logs, total] = await this._repo.getAllLogs(
+      page,
+      limit,
+      startDate,
+      endDate,
+      searchTerm
+    );
 
     return {
       data: logs,

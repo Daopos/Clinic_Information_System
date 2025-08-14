@@ -51,6 +51,26 @@ class MedicineLogController {
     }
   }
 
+  // public async getMedicineLogs(
+  //   req: Request,
+  //   res: Response,
+  //   next: NextFunction
+  // ): Promise<void> {
+  //   try {
+  //     const page = Number(req.query.page) || 1;
+  //     const limit = Number(req.query.limit) || 10;
+
+  //     const logs = await this.medecineLogService.getAllMedicineLogs(
+  //       page,
+  //       limit
+  //     );
+
+  //     res.status(200).json({ responseData: logs });
+  //   } catch (err) {
+  //     next(err);
+  //   }
+  // }
+
   public async getMedicineLogs(
     req: Request,
     res: Response,
@@ -60,9 +80,24 @@ class MedicineLogController {
       const page = Number(req.query.page) || 1;
       const limit = Number(req.query.limit) || 10;
 
+      const startDate = req.query.startDate
+        ? new Date(req.query.startDate as string)
+        : undefined;
+
+      const endDate = req.query.endDate
+        ? new Date(req.query.endDate as string)
+        : undefined;
+
+      const searchTerm = req.query.searchTerm
+        ? (req.query.searchTerm as string)
+        : undefined;
+
       const logs = await this.medecineLogService.getAllMedicineLogs(
         page,
-        limit
+        limit,
+        startDate,
+        endDate,
+        searchTerm
       );
 
       res.status(200).json({ responseData: logs });

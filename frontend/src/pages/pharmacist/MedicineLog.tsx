@@ -71,16 +71,16 @@ const MedicineLog = () => {
                   >
                     {log.dispensed_to}
                   </th>
-                  <td className="px-6 py-4">{log.medicine.med_name}</td>
-                  <td className="w-max px-6 py-4">{log.medicine.dosage}</td>
+                  <td className="px-6 py-4">{log.medicine?.med_name}</td>
+                  <td className="w-max px-6 py-4">{log.medicine?.dosage}</td>
 
-                  <td className="w-max px-6 py-4">{log.medicine.form_med}</td>
+                  <td className="w-max px-6 py-4">{log.medicine?.form_med}</td>
                   <td className="w-max px-6 py-4">{log.quantity_dispensed}</td>
                   <td className="w-max px-6 py-4">
                     {transformDate(log.createdAt)}
                   </td>
                   <td className="w-max px-6 py-4">
-                    {transformDate(log.medicineStock.expiration)}
+                    {transformDate(log.medicineStock?.expiration)}
                   </td>
 
                   <td className="px-6 py-4 flex gap-4">

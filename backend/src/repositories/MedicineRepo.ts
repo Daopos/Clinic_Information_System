@@ -34,9 +34,8 @@ class MedicineRepo implements IMedicine {
       ])
       .addSelect("COALESCE(SUM(s.quantity), 0)", "totalQuantity")
       .groupBy("m.id")
+      .orderBy("m.createdAt", "DESC")
       .getRawMany();
-
-    // return await this.repo.find({ relations: { stocks: true } });
   }
 
   public async deleteById(id: number): Promise<void> {

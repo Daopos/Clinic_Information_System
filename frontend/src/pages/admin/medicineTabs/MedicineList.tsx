@@ -42,6 +42,7 @@ const MedicineList = () => {
 
     try {
       await createMedicine(data);
+      refetch();
       setOpenModal(false);
       setShouldResetForm(true);
       toast.success("Successfully created!");

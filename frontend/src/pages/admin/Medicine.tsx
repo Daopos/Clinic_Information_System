@@ -1,5 +1,6 @@
 import { TabItem, Tabs } from "flowbite-react";
 import MedicineList from "./medicineTabs/MedicineList";
+import MedicineHistory from "./medicineTabs/MedicineHistory";
 
 const Medicine = () => {
   return (
@@ -7,14 +8,8 @@ const Medicine = () => {
       <TabItem active title="Medcine">
         <MedicineList />
       </TabItem>
-      <TabItem title="History">
-        This is
-        <span className="font-medium text-gray-800 dark:text-white">
-          Dashboard tab's associated content
-        </span>
-        . Clicking another tab will toggle the visibility of this one for the
-        next. The tab JavaScript swaps classes to control the content visibility
-        and styling.
+      <TabItem title="Log">
+        <MedicineHistory />
       </TabItem>
     </Tabs>
   );

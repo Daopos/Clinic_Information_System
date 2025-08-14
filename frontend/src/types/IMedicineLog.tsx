@@ -25,4 +25,9 @@ export interface MedicineLog {
   medicineStock: {
     expiration: string;
   };
+  pharmacists: {
+    firstname: string;
+    lastname?: string;
+    middlename?: string;
+  };
 }
