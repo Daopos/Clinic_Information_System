@@ -25,7 +25,7 @@ class AppointmentService {
     }
   }
 
-  public async getAppointmentById(id: number) {
+  public async getAppointmentById(id: number): Promise<Appointment> {
     const appointment = this._repo.findById(id);
 
     if (!appointment) {
@@ -33,6 +33,10 @@ class AppointmentService {
     }
 
     return appointment;
+  }
+
+  public async getAllAppointments(): Promise<Appointment[]> {
+    return await this._repo.getAll();
   }
 }
 

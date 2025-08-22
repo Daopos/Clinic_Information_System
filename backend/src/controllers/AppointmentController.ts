@@ -43,6 +43,20 @@ class AppointmentController {
       next(err);
     }
   }
+
+  public async getAllAppointments(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      const appointments = await this._appointmentService.getAllAppointments();
+
+      res.status(200).json({ responseData: appointments });
+    } catch (err) {
+      next(err);
+    }
+  }
 }
 
 export default new AppointmentController();

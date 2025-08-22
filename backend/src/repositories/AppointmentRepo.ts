@@ -21,7 +21,7 @@ class AppointmentRepo implements IAppointment {
   }
 
   public async getAll(): Promise<Appointment[]> {
-    return await this._repo.find();
+    return await this._repo.find({ relations: ["patient"] });
   }
 }
 

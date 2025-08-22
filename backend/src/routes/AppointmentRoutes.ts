@@ -12,8 +12,14 @@ class AppointmentRoutes {
   public config(): void {
     this.router.post(
       "/appointment",
-      authentication("ADMIN", "PATIENT"), //REMOVE ADMIN
+      authentication("ADMIN", "PATIENTS"), //REMOVE ADMIN
       AppointmentController.createAppointment.bind(AppointmentController)
+    );
+
+    this.router.get(
+      "/appointments",
+      authentication("ADMIN", "DENTIST"),
+      AppointmentController.getAllAppointments.bind(AppointmentController)
     );
   }
 }
