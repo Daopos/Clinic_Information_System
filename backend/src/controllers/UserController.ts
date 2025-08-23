@@ -120,7 +120,11 @@ class UserController {
 
       res
         .status(200)
-        .json({ message: "Successfullly login", responseData: data });
+        .json({
+          message: "Successfullly login",
+          responseData: data,
+          token: token,
+        });
     } catch (err) {
       next(err);
     }
