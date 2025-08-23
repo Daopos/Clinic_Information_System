@@ -22,7 +22,12 @@ class server {
     this.app.use(express.json());
     this.app.use(
       cors({
-        origin: ["http://localhost:5173", "http://localhost:8081"], // your frontend origin
+        origin: [
+          "http://localhost:5173",
+          "http://localhost:8081",
+          "http://192.168.1.9:8081",
+        ], // your frontend origin
+
         credentials: true, // allow cookies to be sent
       })
     );
@@ -58,9 +63,11 @@ class server {
   }
 
   private serve(): void {
-    const PORT: number = Number(process.env.PORT);
+    const PORT: number = Number(process.env.PORT) || 3000;
 
-    this.app.listen(PORT, () => console.log(`Listening to port: ${PORT}`));
+    this.app.listen(PORT, "0.0.0.0", () => {
+      console.log(`Server running at http://0.0.0.0:${PORT}`);
+    });
   }
 }
 

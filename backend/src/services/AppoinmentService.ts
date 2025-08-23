@@ -38,6 +38,10 @@ class AppointmentService {
   public async getAllAppointments(): Promise<Appointment[]> {
     return await this._repo.getAll();
   }
+
+  public async getAppointmentsByPatientId(id: number): Promise<Appointment[]> {
+    return await this._repo.getByPatientId(id);
+  }
 }
 
 export default AppointmentService;

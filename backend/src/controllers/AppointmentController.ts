@@ -22,7 +22,7 @@ class AppointmentController {
     res: Response,
     next: NextFunction
   ): Promise<void> {
-    const id = (req as any).id;
+    const id = (req as any).mobileId;
 
     try {
       const validateBody = await validateDto(CreateAppointmentDto, req.body);
@@ -51,6 +51,23 @@ class AppointmentController {
   ): Promise<void> {
     try {
       const appointments = await this._appointmentService.getAllAppointments();
+
+      res.status(200).json({ responseData: appointments });
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  public async getAppointmentsByPatientId(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    const patientId = (req as any).mobileId;
+
+    try {
+      const appointments =
+        await this._appointmentService.getAppointmentsByPatientId(patientId);
 
       res.status(200).json({ responseData: appointments });
     } catch (err) {

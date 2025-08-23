@@ -4,4 +4,6 @@ export interface IAppointment {
   create(data: Partial<Appointment>): Promise<Appointment>;
   findById(id: number): Promise<Appointment | null>;
   getAll(): Promise<Appointment[]>;
+
+  getByPatientId(id: number): Promise<Appointment[]>;
 }

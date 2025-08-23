@@ -23,6 +23,10 @@ class AppointmentRepo implements IAppointment {
   public async getAll(): Promise<Appointment[]> {
     return await this._repo.find({ relations: ["patient"] });
   }
+
+  public async getByPatientId(id: number): Promise<Appointment[]> {
+    return await this._repo.find({ where: { patientId: id } });
+  }
 }
 
 export default new AppointmentRepo();
