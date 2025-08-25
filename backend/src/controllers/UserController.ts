@@ -118,13 +118,11 @@ class UserController {
         maxAge: 1000 * 60 * 60, // Optional: 1 hour expiration
       });
 
-      res
-        .status(200)
-        .json({
-          message: "Successfullly login",
-          responseData: data,
-          token: token,
-        });
+      res.status(200).json({
+        message: "Successfullly login",
+        responseData: data,
+        token: token,
+      });
     } catch (err) {
       next(err);
     }
@@ -187,6 +185,29 @@ class UserController {
       const data = {
         firstname: user.firstname,
         role: user.role,
+      };
+
+      res.status(200).json({ responseData: data });
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  public async myProfileWeb(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    const id = (req as any).id;
+
+    try {
+      const user = await this.userService.getUserById(id);
+
+      const data = {
+        firstname: user.firstname,
+        lastname: user.lastname,
+        middlename: user.middlename,
+        email: user.email,
       };
 
       res.status(200).json({ responseData: data });

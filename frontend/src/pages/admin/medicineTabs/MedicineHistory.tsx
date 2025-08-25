@@ -46,7 +46,7 @@ const MedicineHistory = () => {
                 >
                   <th className="px-6 py-4">
                     {medicine.pharmacist?.lastname},
-                    {medicine.pharmacist.firstname},+
+                    {medicine.pharmacist.firstname},
                     {medicine.pharmacist?.middlename}
                   </th>
                   <td className="px-6 py-4">{medicine.dispensed_to}</td>

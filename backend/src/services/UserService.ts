@@ -103,6 +103,27 @@ class UserService {
 
     return users;
   }
+
+  public async getByEmail(email: string): Promise<User> {
+    const user = await this._repo.findByEmail(email);
+
+    if (!user) {
+      throw new ApiError("No user Found", 404);
+    }
+
+    return user;
+  }
+
+  public async changePassword(id: number, pass: string): Promise<void> {
+    const salt = await bcrypt.genSalt(10);
+    const password = await bcrypt.hash(pass!, salt);
+
+    const data = {
+      password: password,
+    };
+
+    await this._repo.update(id, data);
+  }
 }
 
 export default UserService;

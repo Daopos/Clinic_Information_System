@@ -4,3 +4,7 @@ export interface IJwtPayload {
   id: number;
   role: UserRole;
 }
+
+export interface IJwtPayloadChangePassword {
+  userId: number;
+}

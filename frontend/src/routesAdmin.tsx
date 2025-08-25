@@ -4,6 +4,7 @@ import Dashboard from "./pages/admin/Dashboard";
 import Employees from "./pages/admin/Employees";
 import Medicine from "./pages/admin/Medicine";
 import Patient from "./pages/admin/Patient";
+import Profile from "./pages/admin/Profile";
 import RoleProtectedRoute from "./utils/ProtextedRoute";
 
 const AdminRoutes = {
@@ -18,6 +19,7 @@ const AdminRoutes = {
         { path: "medicines", element: <Medicine /> },
         { path: "patients", element: <Patient /> },
         { path: "employees", element: <Employees /> },
+        { path: "profile", element: <Profile /> },
       ],
     },
   ],

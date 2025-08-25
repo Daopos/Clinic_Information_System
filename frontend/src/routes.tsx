@@ -4,6 +4,7 @@ import GuestOnlyRoute from "./utils/GuestOnlyRoute";
 import AdminRoutes from "./routesAdmin";
 import PharmacistRoutes from "./routesPharmacist";
 import dentistRoutes from "./routesDentist";
+import ChangePasswordForm from "./zother/ChangePasswordForm";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -17,6 +18,10 @@ const router = createBrowserRouter([
         element: <Login />,
       },
     ],
+  },
+  {
+    element: <ChangePasswordForm />,
+    path: "/reset-password",
   },
   AdminRoutes,
   PharmacistRoutes,

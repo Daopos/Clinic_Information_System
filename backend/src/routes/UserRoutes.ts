@@ -1,6 +1,7 @@
 import express from "express";
 import UserController from "../controllers/UserController";
 import authentication from "../middleware/authentication";
+import UserExtensionController from "../controllers/UserExtensionController";
 
 class UserRoutes {
   public router: express.Router = express.Router();
@@ -52,6 +53,23 @@ class UserRoutes {
       "/logout",
       authentication(),
       UserController.logOutUser.bind(UserController)
+    );
+
+    this.router.get(
+      "/my-profile",
+      authentication(),
+      UserController.myProfileWeb.bind(UserController)
+    );
+
+    this.router.post(
+      "/changeLink",
+      authentication(),
+      UserExtensionController.sendChangePassword.bind(UserController)
+    );
+
+    this.router.post(
+      "/change/password",
+      UserExtensionController.ChangePassword.bind(UserController)
     );
   }
 }
