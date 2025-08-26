@@ -9,9 +9,13 @@ import { useEffect, useState } from "react";
 import { myProfile, sendChangePasswordLink } from "../../services/Auth";
 import type { MyProfile } from "../../types/IProfile";
 import toast, { Toaster } from "react-hot-toast";
+import ConfirmModal from "../../components/ConfirmModal";
 
 export default function Profile() {
   const navigate = useNavigate();
+
+  const [openModal, setModal] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const [profile, setProfile] = useState<MyProfile>({
     firstname: "",
@@ -33,22 +37,29 @@ export default function Profile() {
   }, []);
   const onBack = () => navigate(-1);
 
+  const handleModal = () => {
+    setModal(!openModal);
+  };
+
   const changePassword = async () => {
+    setLoading(true);
     toast.dismiss();
 
     try {
       await sendChangePasswordLink(profile.email);
-
+      handleModal();
       toast.success("Successfully Send!");
     } catch (err) {
       if (err instanceof Error) {
         toast.error(err.message);
       }
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="pb-20 bg-gray-50 ">
       {/* Header */}
       <div className=" sticky top-0 z-1 bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/60 border-b">
         <div className="mx-auto max-w-3xl px-4 py-3 flex items-center gap-3">
@@ -89,7 +100,7 @@ export default function Profile() {
             </div>
             <button
               className="cursor-pointer inline-flex items-center gap-2 text-sm font-medium text-emerald-700 hover:text-emerald-900"
-              onClick={changePassword}
+              onClick={handleModal}
             >
               <LockClosedIcon className="h-5 w-5" />
               <span>Change password</span>
@@ -135,6 +146,13 @@ export default function Profile() {
         </div>
       </div>
       <Toaster />
+      <ConfirmModal
+        pending={loading}
+        onSubmit={changePassword}
+        onClose={handleModal}
+        openModal={openModal}
+        description={"Are you sure you want to reset you password?"}
+      />
     </div>
   );
 }

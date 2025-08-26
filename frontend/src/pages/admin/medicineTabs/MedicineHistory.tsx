@@ -1,5 +1,5 @@
 import { useMedicineLog } from "../../../hooks/useMedicineLog";
-import { transformDate } from "../../../utils/transformDate";
+import { transformDate, transformName } from "../../../utils/transformDate";
 
 const MedicineHistory = () => {
   const { medicineLogs } = useMedicineLog();
@@ -45,9 +45,11 @@ const MedicineHistory = () => {
                   className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200"
                 >
                   <th className="px-6 py-4">
-                    {medicine.pharmacist?.lastname},
-                    {medicine.pharmacist.firstname},
-                    {medicine.pharmacist?.middlename}
+                    {transformName(
+                      medicine.pharmacist.lastname,
+                      medicine.pharmacist.firstname,
+                      medicine.pharmacist.middlename
+                    )}
                   </th>
                   <td className="px-6 py-4">{medicine.dispensed_to}</td>
                   <td className="px-6 py-4">{medicine.medicine.med_name}</td>

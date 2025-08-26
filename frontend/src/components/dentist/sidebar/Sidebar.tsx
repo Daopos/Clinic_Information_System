@@ -10,7 +10,7 @@ const Sidebar = () => {
   return (
     <div className="w-60 h-screen bg-gray-800 text-white sticky top-0 left-0">
       <div className="p-6 border-b border-gray-700">
-        <h2 className="text-lg font-bold">Denntist Sidebar</h2>
+        <h2 className="text-lg font-bold">Dentist Sidebar</h2>
       </div>
       <nav className="mt-4">
         <ul className="space-y-2">

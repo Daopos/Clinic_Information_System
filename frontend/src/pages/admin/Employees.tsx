@@ -4,6 +4,7 @@ import type { Employee, EmployeeFormData } from "../../types/IEmployee";
 import { useEmployees } from "../../hooks/useEmployees";
 import DeleteModal from "../../components/DeleteModal";
 import toast, { Toaster } from "react-hot-toast";
+import { transformName } from "../../utils/transformDate";
 
 const Employees = () => {
   const [openModal, setOpenModal] = useState<boolean>(false);
@@ -140,7 +141,11 @@ const Employees = () => {
                     {i + 1}
                   </th>
                   <td className="px-6 py-4">
-                    {`${employee.lastname}, ${employee.firstname} ${employee.middlename}`}
+                    {transformName(
+                      employee.lastname,
+                      employee.firstname,
+                      employee.middlename
+                    )}
                   </td>
                   <td className="px-6 py-4">{employee.role}</td>
                   <td className="px-6 py-4">{employee.email}</td>

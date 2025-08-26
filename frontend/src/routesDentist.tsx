@@ -1,4 +1,5 @@
 import DentistLayout from "./layouts/DentistLayout";
+import Profile from "./pages/admin/Profile";
 import Appointment from "./pages/dentist/Appointment";
 import Dashboard from "./pages/dentist/Dashboard";
 import RoleProtectedRoute from "./utils/ProtextedRoute";
@@ -12,6 +13,10 @@ const dentistRoutes = {
       children: [
         { path: "dashboard", element: <Dashboard /> },
         { path: "appointments", element: <Appointment /> },
+        {
+          path: "profile",
+          element: <Profile />,
+        },
       ],
     },
   ],

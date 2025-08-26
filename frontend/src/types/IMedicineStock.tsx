@@ -6,6 +6,7 @@ export interface MedicineStock {
   quantity: number;
   hand_in: string;
   medicine: Medicine;
+  status: string;
 }
 
 export interface MedicineStockForm {

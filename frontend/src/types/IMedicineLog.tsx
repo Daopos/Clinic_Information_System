@@ -27,7 +27,7 @@ export interface MedicineLog {
   };
   pharmacist: {
     firstname: string;
-    lastname?: string;
-    middlename?: string;
+    lastname: string;
+    middlename: string;
   };
 }

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useAppointments } from "../../hooks/useAppointment";
-import { transformDate } from "../../utils/transformDate";
+import { transformDate, transformDateTime } from "../../utils/transformDate";
 
 const Appointment = () => {
   const { appointments } = useAppointments();
@@ -47,10 +47,10 @@ const Appointment = () => {
             {appointments.map((appointment) => (
               <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
                 <th className="px-6 py-4 ">
-                  {transformDate(appointment.app_date)}
+                  {transformDateTime(appointment.app_date)}
                 </th>
                 <td className="px-6 py-4">{appointment.services}</td>
-                <td className="px-6 py-4">{appointment.patient.firstname}</td>
+                <td className="px-6 py-4">{appointment.patient?.firstname}</td>
                 <td className="px-6 py-4">{appointment.status}</td>
                 <td className="px-6 py-4">
                   {transformDate(appointment.createdAt)}
@@ -60,7 +60,7 @@ const Appointment = () => {
                     href="#"
                     className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                   >
-                    Edit
+                    Respond
                   </a>
                 </td>
               </tr>

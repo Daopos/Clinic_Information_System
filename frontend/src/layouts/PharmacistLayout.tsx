@@ -69,7 +69,7 @@ const PharmacistLayout = () => {
               </svg>
             }
           >
-            <DropdownItem onClick={() => navigate("/admin/profile")}>
+            <DropdownItem onClick={() => navigate("/pharmacist/profile")}>
               Profile
             </DropdownItem>
             <DropdownDivider />

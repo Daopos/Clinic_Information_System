@@ -44,7 +44,7 @@ class UserRepo implements IUser {
         "user.role",
       ])
       .from(User, "user")
-      .where("user.role != :role", { role: "ADMIN" })
+      .where("user.role NOT IN (:...roles)", { roles: ["ADMIN", "PATIENTS"] })
       .orderBy("user.createdAt", "DESC")
       .getMany();
   }

@@ -68,7 +68,7 @@ const DentistLayout = () => {
               </svg>
             }
           >
-            <DropdownItem onClick={() => navigate("/admin/profile")}>
+            <DropdownItem onClick={() => navigate("/doctor/profile")}>
               Profile
             </DropdownItem>
             <DropdownDivider />

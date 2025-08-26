@@ -30,8 +30,13 @@ class MedicineLogService {
       throw new ApiError("Stock not found", 404);
     }
 
+    if (medicineStock.quantity < data.quantity_dispensed) {
+      throw new ApiError("quantity exceeds available stock.", 400);
+    }
+
     try {
       const medicineLog = await this._repo.createMedicineLog(data);
+
       await this._repoStock.consumeStock(
         (data.medicineStock as MedicineStock).id,
         data.quantity_dispensed

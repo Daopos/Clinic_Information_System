@@ -42,8 +42,19 @@ class StockService {
   public async getAllStockForPharma(): Promise<ReadStockWithoutUserDto[]> {
     const stocks = await this._repo.getAll();
     const stockDto = plainToInstance(ReadStockWithoutUserDto, stocks);
+    const final = stockDto.map((m) => ({
+      ...m,
+      status:
+        m.quantity >= 50
+          ? "High"
+          : m.quantity >= 20
+          ? "Good"
+          : m.quantity >= 1
+          ? "Low"
+          : "Out of Stock",
+    }));
 
-    return stockDto;
+    return final;
   }
 
   public async updateStock(

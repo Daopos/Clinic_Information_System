@@ -144,8 +144,18 @@ const Medicine = () => {
                     {transformDate(stock.expiration)}
                   </td>
                   <td className="px-6 py-4">
-                    <div className="bg-green-200 w-fit p-1 rounded-md">
-                      Good
+                    <div
+                      className={`${
+                        stock.status === "High"
+                          ? "bg-cyan-200"
+                          : stock.status === "Good"
+                          ? "bg-green-200"
+                          : stock.status === "Low"
+                          ? "bg-amber-300"
+                          : "bg-red-200"
+                      } w-fit p-1 rounded-md`}
+                    >
+                      {stock.status}
                     </div>
                   </td>
                   <td className="w-max px-6 py-4">

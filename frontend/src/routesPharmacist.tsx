@@ -1,4 +1,5 @@
 import PharmacistLayout from "./layouts/PharmacistLayout";
+import Profile from "./pages/admin/Profile";
 import Dashboard from "./pages/pharmacist/Dashboard";
 import Medicine from "./pages/pharmacist/Medicine";
 import MedicineLog from "./pages/pharmacist/MedicineLog";
@@ -19,6 +20,10 @@ const PharmacistRoutes = {
         {
           path: "medicinelogs",
           element: <MedicineLog />,
+        },
+        {
+          path: "profile",
+          element: <Profile />,
         },
       ],
     },

@@ -1,6 +1,6 @@
 import { NavLink } from "react-router";
 import { Squares2X2Icon } from "@heroicons/react/24/outline";
-import { CalendarDaysIcon } from "@heroicons/react/24/outline";
+// import { CalendarDaysIcon } from "@heroicons/react/24/outline";
 import { BeakerIcon } from "@heroicons/react/24/outline";
 import { UserGroupIcon } from "@heroicons/react/24/outline";
 
@@ -28,7 +28,7 @@ const Sidebar = () => {
               Dashboard
             </NavLink>
           </li>
-          <li className="px-4 ">
+          {/* <li className="px-4 ">
             <NavLink
               to="/admin/appointments"
               className={({ isActive }) =>
@@ -38,7 +38,7 @@ const Sidebar = () => {
               <CalendarDaysIcon className="h-6 w-6" />
               Appointments
             </NavLink>
-          </li>
+          </li> */}
           <li className="px-4 ">
             <NavLink
               to="/admin/medicines"
@@ -50,7 +50,7 @@ const Sidebar = () => {
               Medicines
             </NavLink>
           </li>
-          <li className="px-4 ">
+          {/* <li className="px-4 ">
             <NavLink
               to="/admin/patients"
               className={({ isActive }) =>
@@ -60,7 +60,7 @@ const Sidebar = () => {
               <UserGroupIcon className="h-6 w-6" />
               Patient
             </NavLink>
-          </li>
+          </li> */}
           <li className="px-4 ">
             <NavLink
               to="/admin/employees"
