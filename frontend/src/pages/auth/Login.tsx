@@ -5,12 +5,16 @@ import type { IUserLogin } from "../../types/IUser";
 import { authLogin } from "../../services/Auth";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../store/user/userSlice";
+import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
+import toast, { Toaster } from "react-hot-toast";
+
 const Login = () => {
   const dispatch = useDispatch();
   const [formData, setFormData] = useState<IUserLogin>({
     email: "",
     password: "",
   });
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChnage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -23,6 +27,8 @@ const Login = () => {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    toast.dismiss();
+
     try {
       const result = await authLogin(formData);
       const { ...user } = result;
@@ -31,7 +37,7 @@ const Login = () => {
       // handle success (e.g. navigate, set user, etc.)
     } catch (err) {
       if (err instanceof Error) {
-        console.log(err.message);
+        toast.error(err.message);
       }
       // optionally show error in UIs
     }
@@ -80,17 +86,31 @@ const Login = () => {
                   Your password
                 </Label>
               </div>
-              <TextInput
-                name="password"
-                className="w-100"
-                id="password1"
-                type="password"
-                required
-                onChange={handleChnage}
-              />
+              <div className="relative">
+                <TextInput
+                  name="password"
+                  className="w-100"
+                  id="password1"
+                  type={showPassword ? "text" : "password"} // Toggle between password and text
+                  required
+                  onChange={handleChnage}
+                />
+                {/* Toggle Button for Eye Icon */}
+                <button
+                  type="button"
+                  className="absolute inset-y-0 right-3 flex items-center text-gray-500"
+                  onClick={() => setShowPassword(!showPassword)} // Toggle password visibility
+                >
+                  {showPassword ? (
+                    <EyeSlashIcon className="h-5 w-5 text-gray-500" />
+                  ) : (
+                    <EyeIcon className="h-5 w-5 text-gray-500" />
+                  )}
+                </button>
+              </div>
               <div className="flex ">
                 <a
-                  href="#"
+                  href="/forgot-password"
                   className="text-cyan-600 hover:underline dark:text-cyan-500 w-100 text-end"
                 >
                   forgot password?
@@ -104,6 +124,7 @@ const Login = () => {
           </form>
         </div>
       </div>
+      <Toaster />
     </div>
   );
 };

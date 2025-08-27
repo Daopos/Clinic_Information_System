@@ -31,13 +31,24 @@ const Sidebar = () => {
           </li>
           <li className="px-4 ">
             <NavLink
+              to="/pharmacist/medicineAdd"
+              className={({ isActive }) =>
+                `${linkClass} ${isActive ? activeClass : ""}`
+              }
+            >
+              <BeakerIcon className="h-6 w-6" />
+              Medicines Add
+            </NavLink>
+          </li>
+          <li className="px-4 ">
+            <NavLink
               to="/pharmacist/medicines"
               className={({ isActive }) =>
                 `${linkClass} ${isActive ? activeClass : ""}`
               }
             >
               <BeakerIcon className="h-6 w-6" />
-              Medicines
+              Medicines Stock
             </NavLink>
           </li>
           <li className="px-4 ">

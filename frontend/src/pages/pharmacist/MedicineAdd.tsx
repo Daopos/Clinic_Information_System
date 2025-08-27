@@ -1,10 +1,10 @@
 import { useState } from "react";
-import MedFormModal from "../../../components/admin/MedFormModal";
-import type { Medicine, MedicineForm } from "../../../types/IMedicine";
-import { useMedicines } from "../../../hooks/useMedicine";
+import { useMedicines } from "../../hooks/useMedicine";
+import type { Medicine, MedicineForm } from "../../types/IMedicine";
 import toast, { Toaster } from "react-hot-toast";
+import MedFormModal from "../../components/admin/MedFormModal";
 
-const MedicineList = () => {
+const MedicineAdd = () => {
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [editModal, setEditModal] = useState<boolean>(false);
   const [selectedMedicine, setSelectedMedicine] = useState<Medicine | null>(
@@ -13,13 +13,25 @@ const MedicineList = () => {
 
   const [shouldResetForm, setShouldResetForm] = useState<boolean>(false);
 
-  const { medicines, createMedicine, updateMedicine, updatePending, refetch } =
-    useMedicines();
+  const [deleteId, setDeleteId] = useState<number>();
+
+  const {
+    medicines,
+    createMedicine,
+    deleteMedicine,
+    updateMedicine,
+    updatePending,
+    refetch,
+  } = useMedicines();
 
   const handleModal = () => {
     setOpenModal(!openModal);
   };
 
+  const handleEditModal = (medecine: Medicine) => {
+    setSelectedMedicine(medecine);
+    setEditModal(true);
+  };
   const handleCloseEditModal = () => {
     setSelectedMedicine(null);
     setEditModal(false);
@@ -34,6 +46,20 @@ const MedicineList = () => {
       setOpenModal(false);
       setShouldResetForm(true);
       toast.success("Successfully created!");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        toast.error(err.message);
+      }
+    }
+  };
+
+  const handleDelete = async () => {
+    toast.dismiss();
+
+    try {
+      await deleteMedicine(deleteId!);
+
+      toast.success("Successfully deleted!");
     } catch (err: unknown) {
       if (err instanceof Error) {
         toast.error(err.message);
@@ -70,6 +96,13 @@ const MedicineList = () => {
                   availability, dosage, expiration dates, and stock levels for
                   your inventory.
                 </p>
+                <button
+                  type="button"
+                  className="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+                  onClick={handleModal}
+                >
+                  Add Medicine
+                </button>
               </div>
             </caption>
             <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -90,6 +123,9 @@ const MedicineList = () => {
                 <th scope="col" className="px-6 py-3">
                   Status
                 </th>
+                <th scope="col" className="px-6 py-3">
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -104,7 +140,7 @@ const MedicineList = () => {
                   >
                     {medicine.med_name}
                   </th>
-                  <td className="px-6 py-4">{medicine.dosage}</td>
+                  <td className="px-6 py-4">{medicine.dosage}mg</td>
                   <td className="px-6 py-4">{medicine.form_med}</td>
                   <td className="px-6 py-4">{medicine.totalQuantity}</td>
                   <td className="px-6 py-4">
@@ -121,6 +157,24 @@ const MedicineList = () => {
                     >
                       {medicine.status}
                     </div>
+                  </td>
+
+                  <td className="px-6 py-4 flex gap-4">
+                    <button
+                      className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                      onClick={() => handleEditModal(medicine)}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="font-medium text-red-600 dark:text-red-500 hover:underline"
+                      onClick={() => {
+                        setDeleteId(medicine.id);
+                        handleDelete();
+                      }}
+                    >
+                      Delete
+                    </button>
                   </td>
                 </tr>
               ))}
@@ -150,4 +204,4 @@ const MedicineList = () => {
   );
 };
 
-export default MedicineList;
+export default MedicineAdd;
