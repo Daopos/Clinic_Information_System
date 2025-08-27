@@ -12,25 +12,25 @@ class MedecineRoutes {
   private config(): void {
     this.router.post(
       "/medicine",
-      authentication("ADMIN"),
+      authentication("ADMIN", "PHARMACIST"),
       MedicineController.createMedicine.bind(MedicineController)
     );
 
     this.router.get(
       "/medicines",
-      authentication("ADMIN"),
+      authentication("ADMIN", "PHARMACIST"),
       MedicineController.getAllMedicine.bind(MedicineController)
     );
 
     this.router.delete(
       "/medicine/:id",
-      authentication("ADMIN"),
+      authentication("ADMIN", "PHARMACIST"),
       MedicineController.deleteMedicineById.bind(MedicineController)
     );
 
     this.router.put(
       "/medicine/:id",
-      authentication("ADMIN"),
+      authentication("ADMIN", "PHARMACIST"),
       MedicineController.updateMedicineeById.bind(MedicineController)
     );
 

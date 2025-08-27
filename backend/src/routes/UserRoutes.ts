@@ -63,7 +63,6 @@ class UserRoutes {
 
     this.router.post(
       "/changeLink",
-      authentication(),
       UserExtensionController.sendChangePassword.bind(UserController)
     );
 
