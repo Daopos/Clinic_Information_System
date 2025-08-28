@@ -16,7 +16,7 @@ const Sidebar = () => {
         <ul className="space-y-2">
           <li className="px-4 ">
             <NavLink
-              to="/doctor/dashboard"
+              to="/dentist/dashboard"
               className={({ isActive }) =>
                 `${linkClass} ${isActive ? activeClass : ""}`
               }
@@ -27,7 +27,7 @@ const Sidebar = () => {
           </li>
           <li className="px-4 ">
             <NavLink
-              to="/doctor/appointments"
+              to="/dentist/appointments"
               className={({ isActive }) =>
                 `${linkClass} ${isActive ? activeClass : ""}`
               }

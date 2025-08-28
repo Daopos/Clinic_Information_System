@@ -39,3 +39,16 @@ export const transformName = (
 
   return name;
 };
+
+export const formatDateTimeLocal = (isoString: string) => {
+  if (!isoString) return "";
+  const date = new Date(isoString);
+
+  // Adjust to local timezone
+  const tzOffset = date.getTimezoneOffset() * 60000;
+  const localISOTime = new Date(date.getTime() - tzOffset)
+    .toISOString()
+    .slice(0, 16);
+
+  return localISOTime;
+};

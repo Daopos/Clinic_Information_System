@@ -19,6 +19,7 @@ const DentistLayout = () => {
   // Map of paths to titles
   const pathTitles: { [key: string]: string } = {
     "/dentist/dashboard": "Dashboard",
+    "/dentist/appointments": "Appointment",
   };
 
   const handleLogout = async () => {

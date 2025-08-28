@@ -75,7 +75,7 @@ const Login = () => {
                 className="w-100"
                 id="email1"
                 type="email"
-                placeholder="name@flowbite.com"
+                placeholder="Enter email"
                 required
                 onChange={handleChnage}
               />
@@ -88,6 +88,7 @@ const Login = () => {
               </div>
               <div className="relative">
                 <TextInput
+                  placeholder="Enter password"
                   name="password"
                   className="w-100"
                   id="password1"

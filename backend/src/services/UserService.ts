@@ -1,4 +1,4 @@
-import { User } from "../entities/User";
+import { User, UserRole } from "../entities/User";
 import IUser from "../interfaces/IUser";
 import { ApiError } from "../middleware/errorHandler";
 import bcrypt from "bcrypt";
@@ -90,6 +90,10 @@ class UserService {
 
   public async loginUser(email: string, password: string): Promise<User> {
     const user = await this._repo.findByEmail(email);
+
+    if (user.role === UserRole.PATIENTS) {
+      throw new ApiError("Invalid email or password", 401);
+    }
 
     if (!user || !(await bcrypt.compare(password, user.password))) {
       throw new ApiError("Invalid email or password", 401);

@@ -74,6 +74,28 @@ class AppointmentController {
       next(err);
     }
   }
+
+  public async approveAppointment(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    const DentistId = (req as any).id;
+    const { id } = req.params;
+    const payload = { ...req.body, dentistId: DentistId };
+    try {
+      const appointment = await this._appointmentService.approveAppointment(
+        Number(id),
+        payload
+      );
+
+      res
+        .status(200)
+        .json({ message: "Successful Approved", responseData: appointment });
+    } catch (err) {
+      next(err);
+    }
+  }
 }
 
 export default new AppointmentController();

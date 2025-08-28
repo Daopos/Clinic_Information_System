@@ -37,7 +37,7 @@ const getMedicines = async (): Promise<Medicine[]> => {
 
 const deleteMedicineById = async (id: number): Promise<void> => {
   try {
-    const result = await AxiosClientUser.delete(`medicine/${id}`);
+    const result = await AxiosClientUser.delete(`/medicine/${id}`);
 
     return result.data.message;
   } catch (error) {

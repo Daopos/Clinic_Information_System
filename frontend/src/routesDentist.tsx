@@ -8,7 +8,7 @@ const dentistRoutes = {
   element: <RoleProtectedRoute allowedRoles={["DENTIST"]} />, // 👈 protect this group
   children: [
     {
-      path: "/doctor",
+      path: "/dentist",
       element: <DentistLayout />,
       children: [
         { path: "dashboard", element: <Dashboard /> },

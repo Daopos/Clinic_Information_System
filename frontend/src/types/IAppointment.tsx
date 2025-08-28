@@ -1,4 +1,4 @@
-export interface Appointment {
+export interface IAppointment {
   id: number;
   services: string;
   dentistId: number | null;
@@ -11,4 +11,10 @@ export interface Appointment {
     lastname: string;
     middlename: string;
   };
+}
+
+export interface AppointmentForm {
+  id?: number;
+  app_date: string;
+  status: string;
 }

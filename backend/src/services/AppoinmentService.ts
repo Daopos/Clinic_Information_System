@@ -42,6 +42,35 @@ class AppointmentService {
   public async getAppointmentsByPatientId(id: number): Promise<Appointment[]> {
     return await this._repo.getByPatientId(id);
   }
+
+  public async approveAppointment(
+    id: number,
+    data: Pick<Appointment, "dentistId" | "app_date" | "status">
+  ): Promise<Appointment> {
+    const appointment = await this._repo.findById(id);
+
+    if (!appointment) {
+      throw new ApiError("Appointment Not found", 404);
+    }
+
+    const checkAppDate = this._repo.checkAppDate(data.app_date);
+
+    if (checkAppDate) {
+      throw new ApiError("Appointment already booked.", 409);
+    }
+
+    const dentist = await this._repoUser.findById(data.dentistId);
+
+    if (!dentist) {
+      throw new ApiError("Dentist Not found", 404);
+    }
+
+    try {
+      return await this._repo.approveAppointment(id, data);
+    } catch (err) {
+      throw new ApiError(err);
+    }
+  }
 }
 
 export default AppointmentService;

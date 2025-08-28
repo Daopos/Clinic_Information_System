@@ -30,6 +30,12 @@ class AppointmentRoutes {
         AppointmentController
       )
     );
+
+    this.router.post(
+      "/appointment/approve/:id",
+      authentication("ADMIN", "DENTIST"), //REMOEV ADMIN
+      AppointmentController.approveAppointment.bind(AppointmentController)
+    );
   }
 }
 

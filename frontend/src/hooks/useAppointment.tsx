@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import appointmentService from "../services/appointmenntService";
-import type { Appointment } from "../types/IAppointment";
+import type { IAppointment } from "../types/IAppointment";
 
 export const useAppointments = () => {
   const {
@@ -9,7 +9,7 @@ export const useAppointments = () => {
     isError,
     error,
     refetch,
-  } = useQuery<Appointment[]>({
+  } = useQuery<IAppointment[]>({
     queryKey: ["appointments"],
     queryFn: appointmentService.getAppointments,
   });

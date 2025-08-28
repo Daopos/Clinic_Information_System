@@ -1,6 +1,6 @@
+import { Appointment } from "./../entities/Appointment";
 import { Repository } from "typeorm";
 import { IAppointment } from "../interfaces/IAppointment";
-import { Appointment } from "../entities/Appointment";
 import { AppDataSource } from "../config/data-source";
 
 class AppointmentRepo implements IAppointment {
@@ -26,6 +26,21 @@ class AppointmentRepo implements IAppointment {
 
   public async getByPatientId(id: number): Promise<Appointment[]> {
     return await this._repo.find({ where: { patientId: id } });
+  }
+
+  public async approveAppointment(
+    id: number,
+    data: Pick<Appointment, "dentistId" | "app_date" | "status">
+  ): Promise<Appointment> {
+    await this._repo.update(id, data);
+
+    return await this._repo.findOneByOrFail({ id });
+  }
+
+  public async checkAppDate(app_date: Date): Promise<boolean> {
+    const existing = await this._repo.findOne({ where: { app_date } });
+
+    return !!existing;
   }
 }
 
