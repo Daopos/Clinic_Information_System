@@ -13,6 +13,7 @@ export enum statusEnum {
   Approved = "Approved",
   Declined = "Declined",
   Pending = "Pending",
+  Completed = "Completed",
 }
 
 @Entity({ name: "appointments" })

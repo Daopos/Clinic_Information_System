@@ -1,13 +1,19 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useAppointments } from "../../hooks/useAppointment";
-import { transformDate, transformDateTime } from "../../utils/transformDate";
 import AppRespond from "../../components/dentist/AppRespond";
 import type { IAppointment, AppointmentForm } from "../../types/IAppointment";
 import toast, { Toaster } from "react-hot-toast";
 import appointmenntService from "../../services/appointmenntService";
 
+// Calendar library
+import { Calendar, momentLocalizer, type EventProps } from "react-big-calendar";
+import moment from "moment";
+import "react-big-calendar/lib/css/react-big-calendar.css";
+
+const localizer = momentLocalizer(moment);
+
 const Appointment = () => {
-  const { appointments } = useAppointments();
+  const { appointments, refetch } = useAppointments();
 
   const [selectedAppointment, setSelectedAppointment] =
     useState<AppointmentForm>({
@@ -17,94 +23,149 @@ const Appointment = () => {
     });
 
   const [openModal, setOpenModal] = useState<boolean>(false);
+  const [filter, setFilter] = useState<string>("all");
 
   const handleModal = (appointment: IAppointment) => {
     setSelectedAppointment(appointment);
     setOpenModal(true);
   };
 
-  const handleCloseModal = () => {
-    setOpenModal(false);
-  };
+  const handleCloseModal = () => setOpenModal(false);
 
   const handleSubmit = async (data: AppointmentForm) => {
     toast.dismiss();
-
     try {
       await appointmenntService.approveAppoitnments(data);
+      refetch();
       handleCloseModal();
       toast.success("Successfully Changed!");
     } catch (err) {
-      if (err instanceof Error) {
-        toast.error(err.message);
-      }
+      if (err instanceof Error) toast.error(err.message);
     }
+  };
+
+  // Custom event render (wrap text, show details)
+  const EventComponent = ({
+    event,
+  }: EventProps<{ resource: IAppointment }>) => {
+    const a: IAppointment = event.resource;
+    return (
+      <div className="whitespace-normal leading-snug">
+        <div className="text-xs font-semibold">{a.services}</div>
+        <div className="text-[11px] text-white">
+          {a.patient?.firstname} ({a.status})
+        </div>
+      </div>
+    );
+  };
+
+  // Filter appointments before rendering
+  const filteredAppointments = useMemo(() => {
+    if (filter === "all") return appointments;
+    return appointments.filter((a) => a.status.toLowerCase() === filter);
+  }, [appointments, filter]);
+
+  // Convert to calendar events
+  const events = filteredAppointments.map((appointment) => ({
+    id: appointment.id,
+    title: `${appointment.services} - ${appointment.patient?.firstname} (${appointment.status})`,
+    start: new Date(appointment.app_date),
+    end: new Date(appointment.app_date),
+    resource: appointment,
+  }));
+
+  // 🎨 Event colors by status
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const eventPropGetter = (event: any) => {
+    const status = event.resource?.status?.toLowerCase();
+    let backgroundColor = "#6b7280"; // default gray
+    if (status === "pending") backgroundColor = "#f59e0b"; // amber
+    if (status === "approved") backgroundColor = "#22c55e"; // green
+    if (status === "declined") backgroundColor = "#ef4444"; // red
+    if (status === "completed") backgroundColor = "#3b82f6"; // blue
+
+    return {
+      style: {
+        backgroundColor,
+        borderColor: backgroundColor,
+        color: "white",
+        borderRadius: "6px",
+        padding: "2px 4px",
+      },
+    };
   };
 
   return (
     <>
-      <div>
-        <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-          <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-            <caption className="p-5 text-lg font-semibold text-left rtl:text-right text-gray-900 bg-white dark:text-white dark:bg-gray-800">
-              Appointments
-              <p className="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400">
-                Browse and manage a complete list of medicines, including
-                availability, dosage, expiration dates, and stock levels for
-                your inventory.
-              </p>
-            </caption>
-            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-              <tr>
-                <th scope="col" className="px-6 py-3">
-                  Appointment date
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  service
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  Patient
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  Status
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  Create
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {appointments.map((appointment) => (
-                <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                  <th className="px-6 py-4 ">
-                    {transformDateTime(appointment.app_date)}
-                  </th>
-                  <td className="px-6 py-4">{appointment.services}</td>
-                  <td className="px-6 py-4">
-                    {appointment.patient?.firstname}
-                  </td>
-                  <td className="px-6 py-4">{appointment.status}</td>
-                  <td className="px-6 py-4">
-                    {transformDate(appointment.createdAt)}
-                  </td>
-                  <td className="px-6 py-4">
-                    <button
-                      onClick={() => handleModal(appointment)}
-                      className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                    >
-                      Respond
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+      <div className="space-y-4">
+        {/* Filter control */}
+        <div className="flex gap-2 items-center">
+          <label className="font-medium">Show:</label>
+          <select
+            className="border rounded px-2 py-1"
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+          >
+            <option value="all">All</option>
+            <option value="pending">Pending</option>
+            <option value="approved">Approved</option>
+            <option value="declined">Declined</option>
+            <option value="completed">Completed</option>
+          </select>
+        </div>
+
+        {/* Legend */}
+        <div className="flex gap-4 text-sm">
+          <span className="flex items-center gap-1">
+            <span
+              className="w-3 h-3 rounded"
+              style={{ background: "#f59e0b" }}
+            />{" "}
+            Pending
+          </span>
+          <span className="flex items-center gap-1">
+            <span
+              className="w-3 h-3 rounded"
+              style={{ background: "#22c55e" }}
+            />{" "}
+            Approved
+          </span>
+          <span className="flex items-center gap-1">
+            <span
+              className="w-3 h-3 rounded"
+              style={{ background: "#ef4444" }}
+            />{" "}
+            Declined
+          </span>
+          <span className="flex items-center gap-1">
+            <span
+              className="w-3 h-3 rounded"
+              style={{ background: "#3b82f6" }}
+            />{" "}
+            Completed
+          </span>
+        </div>
+
+        {/* Calendar */}
+        <div className="h-[700px] bg-white p-2 shadow rounded">
+          <Calendar
+            localizer={localizer}
+            events={events}
+            startAccessor="start"
+            endAccessor="end"
+            style={{ height: "100%" }}
+            onSelectEvent={(event) => handleModal(event.resource)}
+            popup
+            dayLayoutAlgorithm="no-overlap"
+            components={{
+              event: EventComponent,
+            }}
+            eventPropGetter={eventPropGetter}
+          />
         </div>
       </div>
 
+      {/* Modal */}
       <AppRespond
         openModal={openModal}
         onClose={handleCloseModal}

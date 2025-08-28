@@ -11,7 +11,7 @@ const GuestOnlyRoute = () => {
   // ✅ Role-based redirection
   if (user.role === "ADMIN") return <Navigate to="/admin/dashboard" replace />;
   if (user.role === "DENTIST")
-    return <Navigate to="/doctor/dashboard" replace />;
+    return <Navigate to="/dentist/dashboard" replace />;
   if (user.role === "PHARMACIST")
     return <Navigate to="/pharmacist/dashboard" replace />;
 

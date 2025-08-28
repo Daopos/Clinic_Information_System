@@ -1,4 +1,4 @@
-import { Appointment } from "./../entities/Appointment";
+import { Appointment, statusEnum } from "./../entities/Appointment";
 import { Repository } from "typeorm";
 import { IAppointment } from "../interfaces/IAppointment";
 import { AppDataSource } from "../config/data-source";
@@ -38,7 +38,12 @@ class AppointmentRepo implements IAppointment {
   }
 
   public async checkAppDate(app_date: Date): Promise<boolean> {
-    const existing = await this._repo.findOne({ where: { app_date } });
+    const existing = await this._repo.findOne({
+      where: {
+        app_date,
+        status: statusEnum.Pending, // ✅ ignore completed
+      },
+    });
 
     return !!existing;
   }

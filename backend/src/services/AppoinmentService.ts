@@ -1,4 +1,4 @@
-import { Appointment } from "../entities/Appointment";
+import { Appointment, statusEnum } from "../entities/Appointment";
 import { User } from "../entities/User";
 import { IAppointment } from "../interfaces/IAppointment";
 import IUser from "../interfaces/IUser";
@@ -53,10 +53,13 @@ class AppointmentService {
       throw new ApiError("Appointment Not found", 404);
     }
 
-    const checkAppDate = this._repo.checkAppDate(data.app_date);
+    // ✅ Only check conflicts if status is pending
+    if (data.status === statusEnum.Pending) {
+      const checkAppDate = await this._repo.checkAppDate(data.app_date);
 
-    if (checkAppDate) {
-      throw new ApiError("Appointment already booked.", 409);
+      if (checkAppDate) {
+        throw new ApiError("Appointment already booked.", 409);
+      }
     }
 
     const dentist = await this._repoUser.findById(data.dentistId);
@@ -67,8 +70,8 @@ class AppointmentService {
 
     try {
       return await this._repo.approveAppointment(id, data);
-    } catch (err) {
-      throw new ApiError(err);
+    } catch (err: any) {
+      throw new ApiError(err.message || err, 500);
     }
   }
 }
