@@ -36,6 +36,18 @@ const Sidebar = () => {
               Appointments
             </NavLink>
           </li>
+
+          <li className="px-4 ">
+            <NavLink
+              to="/dentist/equipments"
+              className={({ isActive }) =>
+                `${linkClass} ${isActive ? activeClass : ""}`
+              }
+            >
+              <Squares2X2Icon className="h-6 w-6" />
+              Equipments
+            </NavLink>
+          </li>
         </ul>
       </nav>
     </div>
