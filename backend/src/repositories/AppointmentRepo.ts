@@ -12,7 +12,7 @@ class AppointmentRepo implements IAppointment {
 
   public async create(data: Partial<Appointment>): Promise<Appointment> {
     const appointment = this._repo.create(data);
-    this._repo.save(appointment);
+    await this._repo.save(appointment);
     return appointment;
   }
 

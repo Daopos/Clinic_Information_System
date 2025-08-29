@@ -14,6 +14,8 @@ const localizer = momentLocalizer(moment);
 
 const Appointment = () => {
   const { appointments, refetch } = useAppointments();
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const [currentView, setCurrentView] = useState<"month" | "day">("month"); // 👈 track view
 
   const [selectedAppointment, setSelectedAppointment] =
     useState<AppointmentForm>({
@@ -98,7 +100,7 @@ const Appointment = () => {
   return (
     <>
       <div className="space-y-4">
-        {/* Filter control */}
+        {/* Controls */}
         <div className="flex gap-2 items-center">
           <label className="font-medium">Show:</label>
           <select
@@ -112,38 +114,18 @@ const Appointment = () => {
             <option value="declined">Declined</option>
             <option value="completed">Completed</option>
           </select>
-        </div>
 
-        {/* Legend */}
-        <div className="flex gap-4 text-sm">
-          <span className="flex items-center gap-1">
-            <span
-              className="w-3 h-3 rounded"
-              style={{ background: "#f59e0b" }}
-            />{" "}
-            Pending
-          </span>
-          <span className="flex items-center gap-1">
-            <span
-              className="w-3 h-3 rounded"
-              style={{ background: "#22c55e" }}
-            />{" "}
-            Approved
-          </span>
-          <span className="flex items-center gap-1">
-            <span
-              className="w-3 h-3 rounded"
-              style={{ background: "#ef4444" }}
-            />{" "}
-            Declined
-          </span>
-          <span className="flex items-center gap-1">
-            <span
-              className="w-3 h-3 rounded"
-              style={{ background: "#3b82f6" }}
-            />{" "}
-            Completed
-          </span>
+          {/* 👇 Toggle button */}
+          <button
+            className="ml-auto bg-blue-500 text-white px-3 py-1 rounded shadow hover:bg-blue-600 transition"
+            onClick={() =>
+              setCurrentView(currentView === "month" ? "day" : "month")
+            }
+          >
+            {currentView === "month"
+              ? "Switch to Day View"
+              : "Switch to Month View"}
+          </button>
         </div>
 
         {/* Calendar */}
@@ -161,6 +143,11 @@ const Appointment = () => {
               event: EventComponent,
             }}
             eventPropGetter={eventPropGetter}
+            views={["month", "day"]} // 👈 allow both views
+            view={currentView} // 👈 controlled view
+            date={currentDate}
+            onNavigate={(newDate) => setCurrentDate(newDate)}
+            onView={(newView) => setCurrentView(newView as "month" | "day")} // sync when user changes view internally
           />
         </div>
       </div>

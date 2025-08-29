@@ -11,6 +11,7 @@ import { errorValidation } from "./middleware/validationExeption";
 import StockRoutes from "./routes/StockRoutes";
 import MedicineLogRoutes from "./routes/MedicineLogRoutes";
 import AppointmentRoutes from "./routes/AppointmentRoutes";
+import EquipmentRoutes from "./routes/EquipmentRoutes";
 dotenv.config();
 
 class server {
@@ -60,6 +61,9 @@ class server {
 
     //Appointment Routes
     this.app.use("/api/v1", AppointmentRoutes);
+
+    //Equipment Routes
+    this.app.use("/api/v1", EquipmentRoutes);
   }
 
   private serve(): void {
