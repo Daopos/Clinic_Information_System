@@ -38,6 +38,78 @@ class EquipmentController {
       next(err);
     }
   }
+
+  public async editEquipmentById(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    const { id } = req.params;
+
+    try {
+      const equipment = await this._equipmentService.editEquipmentById(
+        Number(id),
+        req.body
+      );
+
+      res
+        .status(200)
+        .json({ message: "Successfully updated", responseData: equipment });
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  public async deleteEquipmentById(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    const { id } = req.params;
+
+    try {
+      await this._equipmentService.deleteEquipmentById(Number(id));
+
+      res.status(200).json({ message: "Successfully deleted" });
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  public async incrementEquipmentById(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    const { id } = req.params;
+    const { qty } = req.body;
+    try {
+      await this._equipmentService.incrementEquipmentById(
+        Number(id),
+        Number(qty)
+      );
+
+      res.status(200).json({ message: "Added quantity" });
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  public async reduceEquipmentById(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    const { id } = req.params;
+    const { qty } = req.body;
+    try {
+      await this._equipmentService.reduceEquipmentById(Number(id), Number(qty));
+
+      res.status(200).json({ message: "reduced quantity" });
+    } catch (err) {
+      next(err);
+    }
+  }
 }
 
 export default new EquipmentController();

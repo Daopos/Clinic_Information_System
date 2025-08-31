@@ -20,6 +20,30 @@ class EquipmentRoutes {
       authentication(),
       EquipmentController.getAllEquipments.bind(EquipmentController)
     );
+
+    this.router.put(
+      "/equipment/:id",
+      authentication(),
+      EquipmentController.editEquipmentById.bind(EquipmentController)
+    );
+
+    this.router.delete(
+      "/equipment/:id",
+      authentication(),
+      EquipmentController.deleteEquipmentById.bind(EquipmentController)
+    );
+
+    this.router.put(
+      "/equipment/add/:id",
+      authentication(),
+      EquipmentController.incrementEquipmentById.bind(EquipmentController)
+    );
+
+    this.router.put(
+      "/equipment/reduce/:id",
+      authentication(),
+      EquipmentController.reduceEquipmentById.bind(EquipmentController)
+    );
   }
 }
 
