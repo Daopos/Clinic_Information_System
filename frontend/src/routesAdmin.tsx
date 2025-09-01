@@ -2,6 +2,7 @@ import AdminLayout from "./layouts/AdminLayout";
 import Appointment from "./pages/admin/Appointment";
 import Dashboard from "./pages/admin/Dashboard";
 import Employees from "./pages/admin/Employees";
+import Equipment from "./pages/admin/Equipment";
 import Medicine from "./pages/admin/Medicine";
 import Patient from "./pages/admin/Patient";
 import Profile from "./pages/admin/Profile";
@@ -20,6 +21,7 @@ const AdminRoutes = {
         { path: "patients", element: <Patient /> },
         { path: "employees", element: <Employees /> },
         { path: "profile", element: <Profile /> },
+        { path: "equipments", element: <Equipment /> },
       ],
     },
   ],

@@ -115,7 +115,7 @@ class UserController {
         httpOnly: true, // Prevent access from JS (XSS protection)
         secure: process.env.NODE_ENV === "production", // HTTPS only in production
         sameSite: "strict", // CSRF protection
-        maxAge: 1000 * 60 * 60, // Optional: 1 hour expiration
+        maxAge: 1000 * 60 * 60 * 24 * 150, // Optional: 1 hour expiration
       });
 
       res.status(200).json({

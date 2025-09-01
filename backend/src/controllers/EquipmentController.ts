@@ -82,11 +82,11 @@ class EquipmentController {
     next: NextFunction
   ): Promise<void> {
     const { id } = req.params;
-    const { qty } = req.body;
+    const { total_quantity } = req.body;
     try {
       await this._equipmentService.incrementEquipmentById(
         Number(id),
-        Number(qty)
+        Number(total_quantity)
       );
 
       res.status(200).json({ message: "Added quantity" });
@@ -101,9 +101,12 @@ class EquipmentController {
     next: NextFunction
   ): Promise<void> {
     const { id } = req.params;
-    const { qty } = req.body;
+    const { total_quantity } = req.body;
     try {
-      await this._equipmentService.reduceEquipmentById(Number(id), Number(qty));
+      await this._equipmentService.reduceEquipmentById(
+        Number(id),
+        Number(total_quantity)
+      );
 
       res.status(200).json({ message: "reduced quantity" });
     } catch (err) {

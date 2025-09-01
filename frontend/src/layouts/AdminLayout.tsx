@@ -19,6 +19,7 @@ const AdminLayout = () => {
     "/admin/medicines": "Medicines",
     "/admin/patients": "Patients",
     "/admin/employees": "Employees",
+    "/admin/equipments": "Equipments",
   };
 
   const pageTitle = pathTitles[location.pathname] || "Dashboard";

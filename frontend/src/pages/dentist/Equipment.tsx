@@ -1,9 +1,16 @@
 import { useState } from "react";
 import { useEquipments } from "../../hooks/useEquipment";
 import CreateEquipmentModal from "../../components/dentist/CreateEquipmentModal";
-import type { EquipmentForm } from "../../types/IEquipment";
+import type {
+  EditEquipmentForm,
+  Equipment,
+  EquipmentForm,
+  UpdateQuantity,
+} from "../../types/IEquipment";
 import equipmentService from "../../services/equipmentService";
 import toast, { Toaster } from "react-hot-toast";
+import EditEquipmentModal from "../../components/dentist/EditEquipmentModal";
+import UpdateQuantityModal from "../../components/dentist/UpdateQuantityModal";
 
 const Equipment = () => {
   const [openCreateModal, setOpenCreateModal] = useState<boolean>(false);
@@ -20,6 +27,55 @@ const Equipment = () => {
       refetch();
       setOpenCreateModal(false);
       toast.success("Successfully Created!");
+    } catch (err) {
+      if (err instanceof Error) toast.error(err.message);
+    }
+  };
+  const [openEditModal, setOpenEditModal] = useState(false);
+  const [selectedEquipment, setSelectedEquipment] = useState<Equipment | null>(
+    null
+  );
+  const handleEditModal = (equipment: Equipment) => {
+    setSelectedEquipment(equipment);
+    setOpenEditModal(true);
+  };
+
+  const handleSubmitEdit = async (data: EditEquipmentForm) => {
+    try {
+      await equipmentService.editEquipment(data.id!, data);
+      refetch();
+      setOpenEditModal(false);
+      toast.success("Successfully Updated!");
+    } catch (err) {
+      if (err instanceof Error) toast.error(err.message);
+    }
+  };
+
+  const [openQuantityModal, setOpenQuantityModal] = useState(false);
+  const [quantityMode, setQuantityMode] = useState<"add" | "reduce">("add");
+  const [selectedId, setSelectedId] = useState<number | null>(null);
+
+  const handleOpenQuantityModal = (id: number, mode: "add" | "reduce") => {
+    setSelectedId(id);
+    setQuantityMode(mode);
+    setOpenQuantityModal(true);
+  };
+
+  const handleSubmitQuantity = async (data: UpdateQuantity) => {
+    toast.dismiss();
+
+    if (!selectedId) return;
+    try {
+      if (quantityMode === "add") {
+        await equipmentService.addEquipment(selectedId, data);
+      } else {
+        await equipmentService.reduceEquipment(selectedId, data);
+      }
+      refetch();
+      setOpenQuantityModal(false);
+      toast.success(
+        `Successfully ${quantityMode === "add" ? "added" : "reduced"}!`
+      );
     } catch (err) {
       if (err instanceof Error) toast.error(err.message);
     }
@@ -75,8 +131,28 @@ const Equipment = () => {
                   </th>
                   <td className="px-6 py-4"> {equipment.total_quantity}</td>
                   <td className="px-6 py-4 flex gap-4">
-                    <button className="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                    <button
+                      onClick={() =>
+                        handleOpenQuantityModal(equipment.id, "add")
+                      }
+                      className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                    >
                       Add
+                    </button>
+                    <button
+                      onClick={() =>
+                        handleOpenQuantityModal(equipment.id, "reduce")
+                      }
+                      className="font-medium text-red-600 dark:text-red-500 hover:underline"
+                    >
+                      Reduce
+                    </button>
+
+                    <button
+                      onClick={() => handleEditModal(equipment)}
+                      className="font-medium text-yellow-600 dark:text-yellow-500 hover:underline"
+                    >
+                      Edit
                     </button>
                     <button className="font-medium text-red-600 dark:text-red-500 hover:underline">
                       Delete
@@ -94,6 +170,20 @@ const Equipment = () => {
         onClose={handleCreateModal}
         openModal={openCreateModal}
         onSubmit={handleSubmitCreate}
+      />
+
+      <EditEquipmentModal
+        onClose={() => setOpenEditModal(false)}
+        openModal={openEditModal}
+        onSubmit={handleSubmitEdit}
+        equipment={selectedEquipment}
+      />
+
+      <UpdateQuantityModal
+        openModal={openQuantityModal}
+        onClose={() => setOpenQuantityModal(false)}
+        onSubmit={handleSubmitQuantity}
+        mode={quantityMode}
       />
     </>
   );

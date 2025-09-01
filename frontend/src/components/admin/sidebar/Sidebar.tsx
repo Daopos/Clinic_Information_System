@@ -3,6 +3,7 @@ import { Squares2X2Icon } from "@heroicons/react/24/outline";
 // import { CalendarDaysIcon } from "@heroicons/react/24/outline";
 import { BeakerIcon } from "@heroicons/react/24/outline";
 import { UserGroupIcon } from "@heroicons/react/24/outline";
+import { CubeIcon } from "@heroicons/react/24/solid";
 
 const Sidebar = () => {
   const linkClass =
@@ -48,6 +49,17 @@ const Sidebar = () => {
             >
               <BeakerIcon className="h-6 w-6" />
               Medicines
+            </NavLink>
+          </li>
+          <li className="px-4 ">
+            <NavLink
+              to="/admin/equipments"
+              className={({ isActive }) =>
+                `${linkClass} ${isActive ? activeClass : ""}`
+              }
+            >
+              <CubeIcon className="h-6 w-6" />
+              Equipments
             </NavLink>
           </li>
           {/* <li className="px-4 ">
